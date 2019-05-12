@@ -27,7 +27,7 @@
      <string notr="true"/>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="tab_1">
      <attribute name="title">
@@ -69,7 +69,7 @@
        <string>Choose a table to access</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="tableSubmitButton">
+     <widget class="QPushButton" name="findTableButton">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -239,6 +239,93 @@
       </widget>
      </widget>
     </widget>
+    <widget class="QWidget" name="advance_search_tab">
+     <attribute name="title">
+      <string>Advanced</string>
+     </attribute>
+     <widget class="QScrollArea" name="advancedSearchScrollArea">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>140</y>
+        <width>941</width>
+        <height>471</height>
+       </rect>
+      </property>
+      <property name="widgetResizable">
+       <bool>true</bool>
+      </property>
+      <widget class="QWidget" name="advancedSearchScrollAreaWidgetContents">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>939</width>
+         <height>469</height>
+        </rect>
+       </property>
+       <widget class="QTableWidget" name="advMainTableWidget">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>941</width>
+          <height>491</height>
+         </rect>
+        </property>
+       </widget>
+      </widget>
+     </widget>
+     <widget class="QLineEdit" name="advancedSearchBox">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>40</y>
+        <width>371</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_3">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>161</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Enter a keyword to search:</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="advancedSearchButton">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>70</y>
+        <width>113</width>
+        <height>32</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Search</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="addSearchDetailsButton">
+      <property name="geometry">
+       <rect>
+        <x>250</x>
+        <y>70</y>
+        <width>113</width>
+        <height>32</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Advanced</string>
+      </property>
+     </widget>
+    </widget>
     <widget class="QWidget" name="tab_3">
      <attribute name="title">
       <string>Insert</string>
@@ -266,7 +353,7 @@
        <string>Choose a table to insert values to</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="tableSubmitButton_tab3">
+     <widget class="QPushButton" name="showInputBarsButton">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -280,6 +367,70 @@
       </property>
      </widget>
      <widget class="QScrollArea" name="scrollArea_tab3">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>140</y>
+        <width>941</width>
+        <height>471</height>
+       </rect>
+      </property>
+      <property name="widgetResizable">
+       <bool>true</bool>
+      </property>
+      <widget class="QWidget" name="scrollAreaWidgetContents">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>939</width>
+         <height>469</height>
+        </rect>
+       </property>
+      </widget>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_4">
+     <attribute name="title">
+      <string>Delete</string>
+     </attribute>
+     <widget class="QComboBox" name="tableComboBox_tab4">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>40</y>
+        <width>181</width>
+        <height>31</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="chooseATableLabel">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>211</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Choose a table to insert values to</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="tableSubmitButton_tab4">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>70</y>
+        <width>113</width>
+        <height>32</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Next</string>
+      </property>
+     </widget>
+     <widget class="QScrollArea" name="scrollArea_tab4">
       <property name="geometry">
        <rect>
         <x>20</x>

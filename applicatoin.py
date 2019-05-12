@@ -1,7 +1,8 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QTableWidgetItem, QPushButton, QWidget
-from PyQt5.QtWidgets import QMainWindow, QCheckBox, QLineEdit, QLabel
+from PyQt5.QtWidgets import QMainWindow, QCheckBox, QLineEdit, QLabel, QDialog
 from PyQt5 import QtCore
+from advancedSearchDialog import Ui_Dialog
 import cx_Oracle
 
 from mainWindow import Ui_MainWindow
@@ -16,21 +17,22 @@ def get_table_names():
     all_table_names = sorted([x[0] for x in c.fetchall()])
 
 class MainWindow:
+    places_to_search = set()  # gonna be a set of tuples (TABLE_NAME, COLUMN_NAME)
 
     def __init__(self):
-
         self.main_win = QMainWindow()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self.main_win)
         self.populate_table_names()
         self.populate_table_checkboxes()
-        self.ui.tableSubmitButton.clicked.connect(self.show_table)
-        self.ui.tableSubmitButton_tab3.clicked.connect(self.create_insert_form)
+        self.ui.findTableButton.clicked.connect(self.show_table)
+        self.ui.showInputBarsButton.clicked.connect(self.create_insert_form)
         self.ui.closeConnectionButton.clicked.connect(self.close_connection)
         self.ui.searchButton.clicked.connect(self.search_keyword)
+        self.ui.addSearchDetailsButton.clicked.connect(self.add_search_details)
+        self.ui.advancedSearchButton.clicked.connect(self.advanced_search_keyword)
 
     def show(self):
-
         self.main_win.show()
 
     def populate_table_names(self):
@@ -64,6 +66,38 @@ class MainWindow:
             self.ui.mainTableWidget.insertRow(row_number)
             for column_number, data in enumerate(row_data):
                 self.ui.mainTableWidget.setItem(row_number, column_number, QTableWidgetItem(str(data)))
+
+    def advanced_search_keyword(self):
+        keyword = self.ui.advancedSearchBox.text()
+        query = ''
+        places = list(self.places_to_search)
+        if len(places) > 0:
+            columns = [x[1] for x in places]
+            table_name = places[0][0]
+            query = 'SELECT * FROM ' + table_name + ' WHERE'
+            query += ' OR '.join([' ' + col + " LIKE '%" + keyword + "%'" for col in columns])
+            print(query)
+            # execute sql query
+            c = conn.cursor()
+            result = c.execute(query)
+
+            col_names = self.get_column_names(table_name)
+            column_count = len(col_names)
+
+            # init table
+            self.ui.advMainTableWidget.setColumnCount(column_count)
+            self.ui.advMainTableWidget.setRowCount(0)
+            self.ui.advMainTableWidget.setHorizontalHeaderLabels(col_names)
+
+            # fill table
+            for row_number, row_data in enumerate(result):
+                self.ui.advMainTableWidget.insertRow(row_number)
+                for column_number, data in enumerate(row_data):
+                    self.ui.advMainTableWidget.setItem(row_number, column_number, QTableWidgetItem(str(data)))
+        else:
+            # TODI display proper error msg
+            print('Why use advanced search then?')
+
 
     def search_keyword(self):
         keyword = self.ui.searchBox.text()
@@ -186,6 +220,70 @@ class MainWindow:
         self.ui.insertLabels = []
         self.ui.insertLineEdits = []
         self.ui.scrollAreaWidgetContents1.setParent(None)
+
+    def add_search_details(self):
+        # display dialog
+        self.advanced_search_dialog = QDialog()
+        dialog_win = Ui_Dialog()
+        self.dialog_win = dialog_win
+        dialog_win.setupUi(self.advanced_search_dialog)
+        self.dialog_win.advClearButton.clicked.connect(self.clear_selected_columns)
+        self.dialog_win.advDoneButton.clicked.connect(self.close_dialog)
+
+        # fill advTableComboBox
+        def table_selected():
+            dialog_win.advColumnComboBox.clear()
+            dialog_win.advColumnComboBox.clearEditText()
+            col_names = self.get_column_names(dialog_win.advTableComboBox.currentText())
+            col_names.append('(all)')
+            col_names = sorted(col_names)
+            dialog_win.advColumnComboBox.addItems(col_names)
+            dialog_win.advColumnComboBox.setCurrentIndex(0)
+            dialog_win.advColumnComboBox.setCurrentText(col_names[0])
+        dialog_win.advTableComboBox.addItems(all_table_names)
+        dialog_win.advSelectTableButton.clicked.connect(table_selected)
+
+        # bind buttons to actions
+        def addPlace():
+            table_name = dialog_win.advTableComboBox.currentText()
+            col_name = dialog_win.advColumnComboBox.currentText()
+            if len(self.places_to_search) == 0 or list(self.places_to_search)[0][0] == table_name:
+                if col_name == '(all)':
+                    for c in self.get_column_names(table_name):
+                        self.add_search_place((table_name, c))
+                else:
+                    self.add_search_place((table_name, col_name))
+
+                self.updateSelectedColumns()
+            else:
+                # TODO print error on UI
+                print('Cannot do advanced search on two different tables at the same time')
+
+        dialog_win.advAddButton.clicked.connect(addPlace)
+
+        self.advanced_search_dialog.show()
+        self.advanced_search_dialog.exec_()
+
+    def add_search_place(self, place):
+        self.places_to_search.add(place)
+
+    def updateSelectedColumns(self):
+        _translate = QtCore.QCoreApplication.translate
+        self.dialog_win.searchPlaces.setColumnCount(2)
+        self.dialog_win.searchPlaces.setRowCount(0)
+        self.dialog_win.searchPlaces.setHorizontalHeaderLabels(['Table Name', 'Column Name'])
+
+        for i, tup in enumerate(self.places_to_search):
+            self.dialog_win.searchPlaces.insertRow(i)
+            self.dialog_win.searchPlaces.setItem(i, 0, QTableWidgetItem(str(tup[0])))
+            self.dialog_win.searchPlaces.setItem(i, 1, QTableWidgetItem(str(tup[1])))
+
+    def clear_selected_columns(self):
+        self.places_to_search = set()
+        self.updateSelectedColumns()
+
+    def close_dialog(self):
+        self.advanced_search_dialog.close()
 
     def close_connection(self):
         conn.close()
