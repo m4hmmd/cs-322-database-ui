@@ -14,6 +14,11 @@ class MainWindow:
     prim_keys = {}
     _translate = QtCore.QCoreApplication.translate
     all_table_names = ['Has_Cities', 'Countries']
+    all_amenities = ['Wifi', 'TV']
+    all_property_types = ['Apartment']
+    all_months_start = ['2018-11-07', '2018-12-01', '2019-01-01', '2019-02-01', '2019-03-01', '2019-04-01', '2019-05-01', '2019-06-01', '2019-07-01', '2019-08-01', '2019-09-01', '2019-10-01', '2019-11-01']
+    all_months_end = ['2018-11-30', '2018-12-31', '2019-01-31', '2019-02-28', '2019-03-31', '2019-04-30', '2019-05-31', '2019-06-30', '2019-07-31', '2019-08-31', '2019-09-30', '2019-10-31', '2019-11-30']
+    all_months = ['2018-11', '2018-12', '2019-01', '2019-02', '2019-03', '2019-04', '2019-05', '2019-06', '2019-07', '2019-08', '2019-09', '2019-10', '2019-11']
 
     def __init__(self):
         dsn_tns = cx_Oracle.makedsn('cs322-db.epfl.ch', '1521', sid='ORCLCDB')
@@ -21,14 +26,18 @@ class MainWindow:
         c = self.conn.cursor()
 
         self.get_table_names()
-
         self.get_primary_keys()
+        self.get_all_amenities()
+        self.get_all_property_types()
+
 
         self.main_win = QMainWindow()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self.main_win)
         self.populate_table_names()
         self.populate_table_checkboxes()
+
+        # buttons
         self.ui.findTableButton.clicked.connect(self.show_table)
         self.ui.showInputBarsButton.clicked.connect(self.create_insert_form)
         self.ui.closeConnectionButton.clicked.connect(self.close_connection)
@@ -36,6 +45,38 @@ class MainWindow:
         self.ui.addSearchDetailsButton.clicked.connect(self.add_search_details)
         self.ui.advancedSearchButton.clicked.connect(self.advanced_search_keyword)
         self.ui.deleteSelectTableButton.clicked.connect(self.create_delete_forms)
+
+        # predefined queries presets
+        self.ui.spinBoxD2Q1.setValue(8)
+        self.ui.comboBoxD2Q2.addItems(['accuracy', 'cleanliness', 'checkin', 'communication', 'location', 'value'])
+        self.ui.comboBoxD2Q2.setCurrentText('cleanliness')
+        self.ui.comboBoxD2Q3_start.addItems(self.all_months)
+        self.ui.comboBoxD2Q3_end.addItems(self.all_months)
+        self.ui.comboBoxD2Q3_start.setCurrentText('2019-03')
+        self.ui.comboBoxD2Q3_end.setCurrentText('2019-09')
+        self.ui.spinBoxD2Q6.setValue(1)
+        self.ui.comboBoxD2Q7.addItems(self.all_amenities)
+        self.ui.comboBoxD2Q7.setCurrentText('Wifi')
+        self.ui.spinBoxD2Q8.setValue(8)
+        self.ui.comboBoxD2Q9.setCurrentText('Spain')
+        self.ui.comboBoxD2Q9.addItems(['Spain', 'Germany'])
+        self.ui.comboBoxD2Q10_c.addItems(['Barcelona', 'Madrid', 'Berlin'])
+        self.ui.comboBoxD2Q10_c.setCurrentText('Barcelona')
+        self.ui.comboBoxD2Q10_pt.addItems(self.all_property_types)
+        self.ui.comboBoxD2Q10_pt.setCurrentText('Apartment')
+
+        # predefined query functions
+        self.ui.predefinedQueryButtonD2Q1.clicked.connect(self.d1q1)
+        self.ui.predefinedQueryButtonD2Q2.clicked.connect(self.d1q2)
+        self.ui.predefinedQueryButtonD2Q3.clicked.connect(self.d1q3)
+        self.ui.predefinedQueryButtonD2Q4.clicked.connect(self.d1q4)
+        self.ui.predefinedQueryButtonD2Q5.clicked.connect(self.d1q5)
+        self.ui.predefinedQueryButtonD2Q6.clicked.connect(self.d1q6)
+        self.ui.predefinedQueryButtonD2Q7.clicked.connect(self.d1q7)
+        self.ui.predefinedQueryButtonD2Q8.clicked.connect(self.d1q8)
+        self.ui.predefinedQueryButtonD2Q9.clicked.connect(self.d1q9)
+        self.ui.predefinedQueryButtonD2Q10.clicked.connect(self.d1q10)
+
 
     def show(self):
         self.main_win.show()
@@ -61,6 +102,16 @@ class MainWindow:
             self.prim_keys[table_name] =[ x[0] for x in c.fetchall() ]
 
         print(self.prim_keys)
+
+    def get_all_amenities(self):
+        c = self.conn.cursor()
+        c.execute("Select AMENITY_NAME from AMENITIES")
+        self.all_amenities = [x[0] for x in c.fetchall()]
+
+    def get_all_property_types(self):
+        c = self.conn.cursor()
+        c.execute("Select PROPERTY_TYPE from PROPERTY_TYPES")
+        self.all_property_types = [x[0] for x in c.fetchall()]
 
     def populate_table_names(self):
         self.ui.tableComboBox.addItems(self.all_table_names)
@@ -124,7 +175,7 @@ class MainWindow:
                 for column_number, data in enumerate(row_data):
                     self.ui.advMainTableWidget.setItem(row_number, column_number, QTableWidgetItem(str(data)))
         else:
-            # TODI display proper error msg
+            # TODO display proper error msg
             print('Why use advanced search then?')
 
 
@@ -386,6 +437,238 @@ class MainWindow:
         self.conn.commit()
 
         self.finish_delete()
+
+    # functions for predefined queries
+    def d1q1(self):
+        nbedrooms = self.ui.spinBoxD2Q1.value()
+        query = "SELECT AVG(L.price) FROM Listings L WHERE L.bedrooms={}".format(nbedrooms)
+        c  = self.conn.cursor()
+        c.execute(query)
+
+        price = c.fetchall()[0][0]
+
+        # init table
+        self.ui.predefinedMainTableWidget.setColumnCount(1)
+        self.ui.predefinedMainTableWidget.setRowCount(0)
+        self.ui.predefinedMainTableWidget.setHorizontalHeaderLabels(["Price"])
+
+        # fill table
+        self.ui.predefinedMainTableWidget.insertRow(0)
+        self.ui.predefinedMainTableWidget.setItem(0, 0, QTableWidgetItem(str(price)))
+
+    def d1q2(self):
+        score_field = self.ui.comboBoxD2Q2.currentText()
+
+        query = "SELECT AVG(S.review_scores_{}) " \
+                "FROM Has_Scores S, Listings L, Has_Amenities HA, Amenities A " \
+                "WHERE A.amenity_name='TV' AND A.amenity_id=HA.amenity_id AND HA.listing_id=L.listing_id AND L.listing_id=S.listing_id"\
+            .format(score_field)
+
+        c = self.conn.cursor()
+        c.execute(query)
+        avg_score = c.fetchall()[0][0]
+
+        # init table
+        self.ui.predefinedMainTableWidget.setColumnCount(1)
+        self.ui.predefinedMainTableWidget.setRowCount(0)
+        self.ui.predefinedMainTableWidget.setHorizontalHeaderLabels(["Score"])
+
+        # fill table
+        self.ui.predefinedMainTableWidget.insertRow(0)
+        self.ui.predefinedMainTableWidget.setItem(0, 0, QTableWidgetItem(str(avg_score)))
+
+    def d1q3(self):
+        start_date = self.all_months_start[self.all_months.index(self.ui.comboBoxD2Q3_start.currentText())]
+        start_end = self.all_months_end[self.all_months.index(self.ui.comboBoxD2Q3_end.currentText())]
+
+        query = "SELECT L.HOST_ID, H.HOST_NAME FROM LISTINGS L, HOSTS H WHERE L.HOST_ID = H.HOST_ID " \
+                "AND L.LISTING_ID IN " \
+                "(SELECT DISTINCT D.LISTING_ID FROM DATES D " \
+                "WHERE D.CAL_DATE >= date '{}' AND D.CAL_DATE <= date '{}' " \
+                "AND D.AVAILABLE = 't')".format(start_date, start_end)
+
+        print (query)
+
+        c = self.conn.cursor()
+        result = c.execute(query)
+
+        # find column headers
+        col_names = ["HOST_ID", "HOST_NAME"]
+
+        # init table
+        self.ui.predefinedMainTableWidget.setColumnCount(len(col_names))
+        self.ui.predefinedMainTableWidget.setRowCount(0)
+        self.ui.predefinedMainTableWidget.setHorizontalHeaderLabels(col_names)
+
+        # fill table
+        for row_number, row_data in enumerate(result):
+            self.ui.predefinedMainTableWidget.insertRow(row_number)
+            for column_number, data in enumerate(row_data):
+                self.ui.predefinedMainTableWidget.setItem(row_number, column_number, QTableWidgetItem(str(data)))
+
+    def d1q4(self):
+        query = "SELECT COUNT(UNIQUE L.listing_id) FROM Listings L, Hosts H1, Hosts H2 WHERE H1.host_name=H2.host_name AND NOT (H1.host_id=H2.host_id) AND L.host_id=H1.host_id"
+
+        c = self.conn.cursor()
+        c.execute(query)
+        avg_score = c.fetchall()[0][0]
+
+        # init table
+        self.ui.predefinedMainTableWidget.setColumnCount(1)
+        self.ui.predefinedMainTableWidget.setRowCount(0)
+        self.ui.predefinedMainTableWidget.setHorizontalHeaderLabels(["Number"])
+
+        # fill table
+        self.ui.predefinedMainTableWidget.insertRow(0)
+        self.ui.predefinedMainTableWidget.setItem(0, 0, QTableWidgetItem(str(avg_score)))
+
+    def d1q5(self):
+        query = "SELECT DISTINCT D.cal_date " \
+                "FROM Dates D, Listings L, Hosts H " \
+                "WHERE H.host_name='Viajes Eco' AND H.host_id=L.host_id AND L.listing_id=D.listing_id AND D.available='t'"
+
+        c = self.conn.cursor()
+        result = c.execute(query)
+
+        # find column headers
+        col_names = ["Date"]
+
+        # init table
+        self.ui.predefinedMainTableWidget.setColumnCount(len(col_names))
+        self.ui.predefinedMainTableWidget.setRowCount(0)
+        self.ui.predefinedMainTableWidget.setHorizontalHeaderLabels(col_names)
+
+        # fill table
+        for row_number, row_data in enumerate(result):
+            self.ui.predefinedMainTableWidget.insertRow(row_number)
+            for column_number, data in enumerate(row_data):
+                self.ui.predefinedMainTableWidget.setItem(row_number, column_number, QTableWidgetItem(str(data)))
+
+    def d1q6(self):
+        nlistings = self.ui.spinBoxD2Q6.value()
+        query = "SELECT H.HOST_ID, H.HOST_NAME FROM HOSTS H WHERE {} = ( SELECT COUNT(*) FROM LISTINGS L WHERE L.HOST_ID = H.HOST_ID )".format(nlistings)
+        c = self.conn.cursor()
+        result = c.execute(query)
+
+        # find column headers
+        col_names = ["HOST_ID", "HOST_NAME"]
+
+        # init table
+        self.ui.predefinedMainTableWidget.setColumnCount(len(col_names))
+        self.ui.predefinedMainTableWidget.setRowCount(0)
+        self.ui.predefinedMainTableWidget.setHorizontalHeaderLabels(col_names)
+
+        # fill table
+        for row_number, row_data in enumerate(result):
+            self.ui.predefinedMainTableWidget.insertRow(row_number)
+            for column_number, data in enumerate(row_data):
+                self.ui.predefinedMainTableWidget.setItem(row_number, column_number, QTableWidgetItem(str(data)))
+
+
+    def d1q7(self):
+        amenity_name = self.ui.comboBoxD2Q7.currentText()
+        query =  "SELECT avg_wifi - avg_without_wifi " \
+                 "FROM ( SELECT AVG(Lw.price) as avg_wifi " \
+                 "FROM Listings Lw, Has_Amenities HA, Amenities A " \
+                 "WHERE A.amenity_name='{}' AND A.amenity_id=HA.amenity_id AND HA.listing_id=Lw.listing_id) " \
+                 "CROSS JOIN (SELECT AVG(L.price) as avg_without_wifi " \
+                 "FROM Listings L, Has_Amenities HA, Amenities A " \
+                 "WHERE A.amenity_name='{}' AND (HA.amenity_id NOT IN (A.amenity_id)) AND HA.listing_id=L.listing_id)".format(amenity_name, amenity_name)
+
+        c = self.conn.cursor()
+        c.execute(query)
+        avg_score = c.fetchall()[0][0]
+
+        # init table
+        self.ui.predefinedMainTableWidget.setColumnCount(1)
+        self.ui.predefinedMainTableWidget.setRowCount(0)
+        self.ui.predefinedMainTableWidget.setHorizontalHeaderLabels(["Price"])
+
+        # fill table
+        self.ui.predefinedMainTableWidget.insertRow(0)
+        self.ui.predefinedMainTableWidget.setItem(0, 0, QTableWidgetItem(str(avg_score)))
+
+    def d1q8(self):
+        nbeds = self.ui.spinBoxD2Q8.value()
+        query = "SELECT avg_berlin - avg_madrid FROM ( (SELECT AVG (L1.price) AS avg_berlin " \
+                "FROM Listings L1, Has_Neighbourhoods N1, Has_Cities C1 " \
+                "WHERE L1.beds = {} AND L1.neighbourhood_id = N1.neighbourhood_id AND N1.city_id = C1.city_id AND C1.city = 'Berlin') CROSS JOIN " \
+                "(SELECT AVG (L1.price) AS avg_madrid " \
+                "FROM Listings L1, Has_Neighbourhoods N1, Has_Cities C1 " \
+                "WHERE L1.beds = {} AND L1.neighbourhood_id = N1.neighbourhood_id AND N1.city_id = C1.city_id AND C1.city = 'Madrid') " \
+                ")".format(nbeds, nbeds)
+        c  = self.conn.cursor()
+        c.execute(query)
+
+        price = c.fetchall()[0][0]
+
+        # init table
+        self.ui.predefinedMainTableWidget.setColumnCount(1)
+        self.ui.predefinedMainTableWidget.setRowCount(0)
+        self.ui.predefinedMainTableWidget.setHorizontalHeaderLabels(["Price"])
+
+        # fill table
+        self.ui.predefinedMainTableWidget.insertRow(0)
+        self.ui.predefinedMainTableWidget.setItem(0, 0, QTableWidgetItem(str(price)))
+
+    def d1q9(self):
+        country = self.ui.comboBoxD2Q9.currentText()
+        query = "SELECT DISTINCT L1.host_id, H1.host_name " \
+                "FROM Listings L1, Hosts H1, Has_Neighbourhoods N1, Has_Cities C1, Countries Cn " \
+                "WHERE L1.host_id = H1.host_id AND L1.neighbourhood_id = N1.neighbourhood_id " \
+                "AND N1.city_id = C1.city_id AND C1.country_code = Cn.country_code AND Cn.country = '{}' " \
+                "Order By (SELECT COUNT (*) FROM Listings L2 WHERE L2.host_id = L1.host_id) DESC FETCH NEXT 10 ROWS ONLY".format(country)
+
+        c = self.conn.cursor()
+        result = c.execute(query)
+
+        # find column headers
+        col_names = ["HOST_ID", "HOST_NAME"]
+
+        # init table
+        self.ui.predefinedMainTableWidget.setColumnCount(len(col_names))
+        self.ui.predefinedMainTableWidget.setRowCount(0)
+        self.ui.predefinedMainTableWidget.setHorizontalHeaderLabels(col_names)
+
+        # fill table
+        for row_number, row_data in enumerate(result):
+            self.ui.predefinedMainTableWidget.insertRow(row_number)
+            for column_number, data in enumerate(row_data):
+                self.ui.predefinedMainTableWidget.setItem(row_number, column_number, QTableWidgetItem(str(data)))
+
+    def d1q10(self):
+        property_type = self.ui.comboBoxD2Q10_pt.currentText()
+        city = self.ui.comboBoxD2Q10_c.currentText()
+        query = "SELECT L.listing_id, I.LISTING_NAME FROM LISTINGS L " \
+                "INNER JOIN (SELECT S.listing_id, S.review_scores_rating from HAS_SCORES S) S " \
+                "ON L.listing_id = S.listing_id " \
+                "INNER JOIN (SELECT I.listing_id, I.listing_name FROM HAS_INFO I) I " \
+                "ON L.listing_id = I.listing_id " \
+                "WHERE L.neighbourhood_id in " \
+                "(SELECT NEIGHBOURHOOD_ID FROM HAS_NEIGHBOURHOODS WHERE CITY_ID = " \
+                "(SELECT CITY_ID FROM HAS_CITIES WHERE CITY = '{}')) " \
+                "AND L.property_type_id = " \
+                "(SELECT PROPERTY_TYPE_ID FROM PROPERTY_TYPES WHERE PROPERTY_TYPE = '{}') " \
+                "ORDER BY S.REVIEW_SCORES_RATING DESC NULLS LAST " \
+                "FETCH NEXT 10 ROWS ONLY".format(city, property_type)
+
+        c = self.conn.cursor()
+        result = c.execute(query)
+
+        # find column headers
+        col_names = ["LISTING_ID", "LISTING_NAME"]
+
+        # init table
+        self.ui.predefinedMainTableWidget.setColumnCount(len(col_names))
+        self.ui.predefinedMainTableWidget.setRowCount(0)
+        self.ui.predefinedMainTableWidget.setHorizontalHeaderLabels(col_names)
+
+        # fill table
+        for row_number, row_data in enumerate(result):
+            self.ui.predefinedMainTableWidget.insertRow(row_number)
+            for column_number, data in enumerate(row_data):
+                self.ui.predefinedMainTableWidget.setItem(row_number, column_number,
+                                                          QTableWidgetItem(str(data)))
 
     def close_connection(self):
         self.conn.close()

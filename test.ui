@@ -27,7 +27,7 @@
      <string notr="true"/>
     </property>
     <property name="currentIndex">
-     <number>4</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab_1">
      <attribute name="title">
@@ -109,7 +109,7 @@
           <x>0</x>
           <y>0</y>
           <width>941</width>
-          <height>491</height>
+          <height>471</height>
          </rect>
         </property>
        </widget>
@@ -160,7 +160,7 @@
           <x>0</x>
           <y>0</y>
           <width>721</width>
-          <height>491</height>
+          <height>471</height>
          </rect>
         </property>
        </widget>
@@ -270,7 +270,7 @@
           <x>0</x>
           <y>0</y>
           <width>941</width>
-          <height>491</height>
+          <height>471</height>
          </rect>
         </property>
        </widget>
@@ -443,14 +443,14 @@
      <widget class="QPushButton" name="deleteSelectTableButton">
       <property name="geometry">
        <rect>
-        <x>250</x>
-        <y>40</y>
-        <width>31</width>
+        <x>10</x>
+        <y>70</y>
+        <width>113</width>
         <height>32</height>
        </rect>
       </property>
       <property name="text">
-       <string>&gt;</string>
+       <string>Next</string>
       </property>
      </widget>
     </widget>
@@ -458,6 +458,552 @@
      <attribute name="title">
       <string>Predefined</string>
      </attribute>
+     <widget class="QScrollArea" name="scrollArea_tab5">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>140</y>
+        <width>941</width>
+        <height>471</height>
+       </rect>
+      </property>
+      <property name="widgetResizable">
+       <bool>true</bool>
+      </property>
+      <widget class="QWidget" name="scrollAreaWidgetContents_4">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>939</width>
+         <height>469</height>
+        </rect>
+       </property>
+       <widget class="QTableWidget" name="predefinedMainTableWidget">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>941</width>
+          <height>471</height>
+         </rect>
+        </property>
+       </widget>
+      </widget>
+     </widget>
+     <widget class="QTabWidget" name="tabWidget_2">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>0</y>
+        <width>941</width>
+        <height>131</height>
+       </rect>
+      </property>
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="predefinedQueryTab_D2Q1">
+       <attribute name="title">
+        <string>D2Q1</string>
+       </attribute>
+       <widget class="QLabel" name="label_5">
+        <property name="geometry">
+         <rect>
+          <x>260</x>
+          <y>20</y>
+          <width>261</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>What is the average price for a listing with</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_6">
+        <property name="geometry">
+         <rect>
+          <x>590</x>
+          <y>20</y>
+          <width>81</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>bedrooms?</string>
+        </property>
+       </widget>
+       <widget class="QSpinBox" name="spinBoxD2Q1">
+        <property name="geometry">
+         <rect>
+          <x>530</x>
+          <y>20</y>
+          <width>48</width>
+          <height>24</height>
+         </rect>
+        </property>
+        <property name="baseSize">
+         <size>
+          <width>11</width>
+          <height>0</height>
+         </size>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="predefinedQueryButtonD2Q1">
+        <property name="geometry">
+         <rect>
+          <x>410</x>
+          <y>60</y>
+          <width>113</width>
+          <height>32</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Search</string>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="predefinedQueryTab_D2Q2">
+       <attribute name="title">
+        <string>D2Q2</string>
+       </attribute>
+       <widget class="QLabel" name="label_7">
+        <property name="geometry">
+         <rect>
+          <x>490</x>
+          <y>20</y>
+          <width>211</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>review score for listings with TV?</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="predefinedQueryButtonD2Q2">
+        <property name="geometry">
+         <rect>
+          <x>410</x>
+          <y>60</y>
+          <width>113</width>
+          <height>32</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Search</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_8">
+        <property name="geometry">
+         <rect>
+          <x>250</x>
+          <y>20</y>
+          <width>131</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>What is the average </string>
+        </property>
+       </widget>
+       <widget class="QComboBox" name="comboBoxD2Q2">
+        <property name="geometry">
+         <rect>
+          <x>380</x>
+          <y>20</y>
+          <width>101</width>
+          <height>26</height>
+         </rect>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="predefinedQueryTab_D2Q3">
+       <attribute name="title">
+        <string>D2Q3</string>
+       </attribute>
+       <widget class="QPushButton" name="predefinedQueryButtonD2Q3">
+        <property name="geometry">
+         <rect>
+          <x>410</x>
+          <y>60</y>
+          <width>113</width>
+          <height>32</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Search</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_10">
+        <property name="geometry">
+         <rect>
+          <x>120</x>
+          <y>20</y>
+          <width>391</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Print all the hosts who have an available property between date</string>
+        </property>
+       </widget>
+       <widget class="QComboBox" name="comboBoxD2Q3_start">
+        <property name="geometry">
+         <rect>
+          <x>510</x>
+          <y>20</y>
+          <width>141</width>
+          <height>26</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_20">
+        <property name="geometry">
+         <rect>
+          <x>660</x>
+          <y>20</y>
+          <width>21</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>and</string>
+        </property>
+       </widget>
+       <widget class="QComboBox" name="comboBoxD2Q3_end">
+        <property name="geometry">
+         <rect>
+          <x>690</x>
+          <y>20</y>
+          <width>141</width>
+          <height>26</height>
+         </rect>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="predefinedQueryTab_D2Q4">
+       <attribute name="title">
+        <string>D2Q4</string>
+       </attribute>
+       <widget class="QPushButton" name="predefinedQueryButtonD2Q4">
+        <property name="geometry">
+         <rect>
+          <x>410</x>
+          <y>60</y>
+          <width>113</width>
+          <height>32</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Search</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_11">
+        <property name="geometry">
+         <rect>
+          <x>140</x>
+          <y>20</y>
+          <width>651</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Print how many listing items exist that are posted by two different hosts but the hosts have the same name.</string>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="predefinedQueryTab_D2Q5">
+       <attribute name="title">
+        <string>D2Q5</string>
+       </attribute>
+       <widget class="QLabel" name="label_12">
+        <property name="geometry">
+         <rect>
+          <x>260</x>
+          <y>20</y>
+          <width>461</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Print all the dates that 'Viajes Eco' has available accommodations for rent.</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="predefinedQueryButtonD2Q5">
+        <property name="geometry">
+         <rect>
+          <x>410</x>
+          <y>60</y>
+          <width>113</width>
+          <height>32</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Search</string>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="predefinedQueryTab_D2Q6">
+       <attribute name="title">
+        <string>D2Q6</string>
+       </attribute>
+       <widget class="QPushButton" name="predefinedQueryButtonD2Q6">
+        <property name="geometry">
+         <rect>
+          <x>410</x>
+          <y>60</y>
+          <width>113</width>
+          <height>32</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Search</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_13">
+        <property name="geometry">
+         <rect>
+          <x>270</x>
+          <y>20</y>
+          <width>311</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Find all the hosts (host_ids, host_names) that have</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_9">
+        <property name="geometry">
+         <rect>
+          <x>650</x>
+          <y>30</y>
+          <width>71</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>listing(s).</string>
+        </property>
+       </widget>
+       <widget class="QSpinBox" name="spinBoxD2Q6">
+        <property name="geometry">
+         <rect>
+          <x>590</x>
+          <y>20</y>
+          <width>48</width>
+          <height>24</height>
+         </rect>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="predefinedQueryTab_D2Q7">
+       <attribute name="title">
+        <string>D2Q7</string>
+       </attribute>
+       <widget class="QLabel" name="label_14">
+        <property name="geometry">
+         <rect>
+          <x>160</x>
+          <y>20</y>
+          <width>461</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>What is the difference in the average price of listings with and without</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="predefinedQueryButtonD2Q7">
+        <property name="geometry">
+         <rect>
+          <x>410</x>
+          <y>60</y>
+          <width>113</width>
+          <height>32</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Search</string>
+        </property>
+       </widget>
+       <widget class="QComboBox" name="comboBoxD2Q7">
+        <property name="geometry">
+         <rect>
+          <x>590</x>
+          <y>20</y>
+          <width>191</width>
+          <height>26</height>
+         </rect>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="predefinedQueryTab_D2Q8">
+       <attribute name="title">
+        <string>D2Q8</string>
+       </attribute>
+       <widget class="QPushButton" name="predefinedQueryButtonD2Q8">
+        <property name="geometry">
+         <rect>
+          <x>410</x>
+          <y>60</y>
+          <width>113</width>
+          <height>32</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Search</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_15">
+        <property name="geometry">
+         <rect>
+          <x>160</x>
+          <y>20</y>
+          <width>311</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>How much more (or less) costly to rent a room with</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_18">
+        <property name="geometry">
+         <rect>
+          <x>540</x>
+          <y>20</y>
+          <width>291</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>beds in Berlin compared to Madrid on average?</string>
+        </property>
+       </widget>
+       <widget class="QSpinBox" name="spinBoxD2Q8">
+        <property name="geometry">
+         <rect>
+          <x>480</x>
+          <y>20</y>
+          <width>48</width>
+          <height>24</height>
+         </rect>
+        </property>
+        <property name="baseSize">
+         <size>
+          <width>11</width>
+          <height>0</height>
+         </size>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="predefinedQueryTab_D2Q9">
+       <attribute name="title">
+        <string>D2Q9</string>
+       </attribute>
+       <widget class="QPushButton" name="predefinedQueryButtonD2Q9">
+        <property name="geometry">
+         <rect>
+          <x>410</x>
+          <y>60</y>
+          <width>113</width>
+          <height>32</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Search</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_16">
+        <property name="geometry">
+         <rect>
+          <x>140</x>
+          <y>20</y>
+          <width>511</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Find the top-10 (in terms of the number of listings) hosts (host_ids, host_names) in</string>
+        </property>
+       </widget>
+       <widget class="QComboBox" name="comboBoxD2Q9">
+        <property name="geometry">
+         <rect>
+          <x>650</x>
+          <y>20</y>
+          <width>161</width>
+          <height>26</height>
+         </rect>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="predefinedQueryTab_D2Q10">
+       <attribute name="title">
+        <string>D2Q10</string>
+       </attribute>
+       <widget class="QPushButton" name="predefinedQueryButtonD2Q10">
+        <property name="geometry">
+         <rect>
+          <x>410</x>
+          <y>60</y>
+          <width>113</width>
+          <height>32</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Search</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_17">
+        <property name="geometry">
+         <rect>
+          <x>130</x>
+          <y>20</y>
+          <width>261</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Find the top-10 rated (review_score_rating)</string>
+        </property>
+       </widget>
+       <widget class="QComboBox" name="comboBoxD2Q10_c">
+        <property name="geometry">
+         <rect>
+          <x>670</x>
+          <y>20</y>
+          <width>161</width>
+          <height>26</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QComboBox" name="comboBoxD2Q10_pt">
+        <property name="geometry">
+         <rect>
+          <x>410</x>
+          <y>20</y>
+          <width>161</width>
+          <height>26</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_19">
+        <property name="geometry">
+         <rect>
+          <x>580</x>
+          <y>20</y>
+          <width>81</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string> (id,name) in</string>
+        </property>
+       </widget>
+      </widget>
+     </widget>
     </widget>
    </widget>
   </widget>
