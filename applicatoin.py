@@ -1,6 +1,6 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QTableWidgetItem, QPushButton, QWidget
-from PyQt5.QtWidgets import QMainWindow, QCheckBox, QLineEdit, QLabel, QDialog
+from PyQt5.QtWidgets import QApplication, QTableWidgetItem, QPushButton, QWidget, QScrollArea
+from PyQt5.QtWidgets import QMainWindow, QCheckBox, QLineEdit, QLabel, QDialog, QTableWidget, QTabWidget
 from PyQt5 import QtCore
 from advancedSearchDialog import Ui_Dialog
 import cx_Oracle
@@ -10,6 +10,7 @@ from mainWindow import Ui_MainWindow
 
 
 class MainWindow:
+    MAX_TUPLES_PER_PAGE = 1000
     places_to_search = set()  # gonna be a set of tuples (TABLE_NAME, COLUMN_NAME)
     prim_keys = {}
     _translate = QtCore.QCoreApplication.translate
@@ -19,6 +20,28 @@ class MainWindow:
     all_months_start = ['2018-11-07', '2018-12-01', '2019-01-01', '2019-02-01', '2019-03-01', '2019-04-01', '2019-05-01', '2019-06-01', '2019-07-01', '2019-08-01', '2019-09-01', '2019-10-01', '2019-11-01']
     all_months_end = ['2018-11-30', '2018-12-31', '2019-01-31', '2019-02-28', '2019-03-31', '2019-04-30', '2019-05-31', '2019-06-30', '2019-07-31', '2019-08-31', '2019-09-30', '2019-10-31', '2019-11-30']
     all_months = ['2018-11', '2018-12', '2019-01', '2019-02', '2019-03', '2019-04', '2019-05', '2019-06', '2019-07', '2019-08', '2019-09', '2019-10', '2019-11']
+    default_places_to_search = {'AMENITIES': ['AMENITY_NAME'],
+                                'BED_TYPES': ['BED_TYPE'],
+                                'CANCELLATION_POLICIES': ['CANCELLATION_POLICY'],
+                                'COUNTRIES': ['COUNTRY'],
+                                'DATES': ['CAL_DATE'],
+                                'HAS_AMENITIES': [],
+                                'HAS_CITIES': ['CITY'],
+                                'HAS_INFO': ['LISTING_NAME', 'SUMMARY_INFO', 'SPACE_INFO', 'NEIGHBORHOOD_OVERVIEW'], #TODO not DESCRIPTION; should it be here?
+                                'HAS_NEIGHBOURHOODS': ['NEIGHBOURHOOD'],
+                                'HAS_SCORES': [],
+                                'HAS_VERIFICATIONS': [],
+                                'HOST_RESPONSE_TIMES': [],
+                                'HOSTS': [],
+                                'LISTINGS': [],
+                                'PRICES': [],
+                                'PROPERTY_TYPES': ['PROPERTY_TYPE'],
+                                'REVIEWED_BY': [],
+                                'ROOM_TYPES': [],
+                                'RULES': [],
+                                'UI_TEST': [],
+                                'VERIFICATIONS': []
+                                }
 
     def __init__(self):
         dsn_tns = cx_Oracle.makedsn('cs322-db.epfl.ch', '1521', sid='ORCLCDB')
@@ -37,6 +60,11 @@ class MainWindow:
         self.populate_table_names()
         self.populate_table_checkboxes()
 
+        # advanced search tab widget
+        self.ui.searchTabWidget = QTabWidget(self.ui.tab_2)
+        self.ui.searchTabWidget.setGeometry(QtCore.QRect(10, 99, 741, 511))
+        self.ui.searchTabWidget.setObjectName("searchTabWidget")
+
         # buttons
         self.ui.findTableButton.clicked.connect(self.show_table)
         self.ui.showInputBarsButton.clicked.connect(self.create_insert_form)
@@ -45,6 +73,9 @@ class MainWindow:
         self.ui.addSearchDetailsButton.clicked.connect(self.add_search_details)
         self.ui.advancedSearchButton.clicked.connect(self.advanced_search_keyword)
         self.ui.deleteSelectTableButton.clicked.connect(self.create_delete_forms)
+        self.ui.printTablesMoreButton.clicked.connect(self.show_more)
+        self.ui.advancedSearchMoreButton.clicked.connect(self.show_more_advanced_search)
+        self.ui.searchMoreButton.clicked.connect(self.show_more_search)
 
         # predefined queries presets
         self.ui.spinBoxD2Q1.setValue(8)
@@ -132,6 +163,9 @@ class MainWindow:
         c = self.conn.cursor()
         result = c.execute(query)
 
+        self.temp_table_print_tables = result
+        self.temp_stop_print_tables = 0
+
         # find column headers
         col_names = self.get_column_names(table_name)
         column_count = len(col_names)
@@ -143,12 +177,29 @@ class MainWindow:
 
         # fill table
         for row_number, row_data in enumerate(result):
+            if row_number >= self.MAX_TUPLES_PER_PAGE:
+                self.temp_stop_print_tables = self.MAX_TUPLES_PER_PAGE
+                break
+
             self.ui.mainTableWidget.insertRow(row_number)
             for column_number, data in enumerate(row_data):
                 self.ui.mainTableWidget.setItem(row_number, column_number, QTableWidgetItem(str(data)))
 
+
+    def show_more(self):
+        # fill table
+        for row_number, row_data in enumerate(self.temp_table_print_tables):
+            if row_number >= self.MAX_TUPLES_PER_PAGE:
+                self.temp_stop_print_tables += self.MAX_TUPLES_PER_PAGE
+                break
+            self.ui.mainTableWidget.insertRow(row_number + self.temp_stop_print_tables)
+            for column_number, data in enumerate(row_data):
+                self.ui.mainTableWidget.setItem(row_number + self.temp_stop_print_tables, column_number, QTableWidgetItem(str(data)))
+
+
     def advanced_search_keyword(self):
         keyword = self.ui.advancedSearchBox.text()
+        keyword = keyword.replace("'", "''")
         query = ''
         places = list(self.places_to_search)
         if len(places) > 0:
@@ -161,6 +212,9 @@ class MainWindow:
             c = self.conn.cursor()
             result = c.execute(query)
 
+            self.temp_table_advanced_search = result
+            self.temp_stop_advanced_search = 0
+
             col_names = self.get_column_names(table_name)
             column_count = len(col_names)
 
@@ -171,6 +225,10 @@ class MainWindow:
 
             # fill table
             for row_number, row_data in enumerate(result):
+                if row_number >= self.MAX_TUPLES_PER_PAGE:
+                    self.temp_stop_advanced_search = self.MAX_TUPLES_PER_PAGE
+                    break
+
                 self.ui.advMainTableWidget.insertRow(row_number)
                 for column_number, data in enumerate(row_data):
                     self.ui.advMainTableWidget.setItem(row_number, column_number, QTableWidgetItem(str(data)))
@@ -178,46 +236,113 @@ class MainWindow:
             # TODO display proper error msg
             print('Why use advanced search then?')
 
+    def show_more_advanced_search(self):
+        # fill table
+        for row_number, row_data in enumerate(self.temp_table_advanced_search):
+            if row_number >= self.MAX_TUPLES_PER_PAGE:
+                self.temp_stop_advanced_search += self.MAX_TUPLES_PER_PAGE
+                break
+            self.ui.advMainTableWidget.insertRow(row_number + self.temp_stop_advanced_search)
+            for column_number, data in enumerate(row_data):
+                self.ui.advMainTableWidget.setItem(row_number + self.temp_stop_advanced_search, column_number, QTableWidgetItem(str(data)))
 
     def search_keyword(self):
-        keyword = self.ui.searchBox.text()
-        tables_to_search = [self.all_table_names[i] for i, checkBox in enumerate(self.ui.checkBoxes) if checkBox.isChecked()]
+        self.ui.searchTabWidget.clear()
 
-        print(keyword)
-        print(tables_to_search)
+        keyword = self.ui.searchBox.text()
+        keyword = keyword.replace("'", "''")
+        non_empty_table_names = [table_name for table_name in self.all_table_names if len(self.default_places_to_search[table_name]) != 0]
+        tables_to_search = [non_empty_table_names[i] for i, checkBox in enumerate(self.ui.checkBoxes) if
+                            checkBox.isChecked()]
 
         if len(tables_to_search) == 0:
-            # basic search
-            query = 'select * from Countries'  # TODO
-        else:
-            # advanced search
-            query = 'select * from Countries'  # TODO
+            tables_to_search = non_empty_table_names
 
-        # execute sql query
-        c = self.conn.cursor()
-        result = c.execute(query)
+        search_in = {}
+        for table_name in tables_to_search:
+            search_in[table_name] = self.default_places_to_search[table_name]
 
-        column_count = 5 #TODO
-        col_names = ['A', 'B', 'C', 'D', 'E'] #TODO
+        print(keyword)
+        print(search_in)
 
-        # init table
-        self.ui.mainTableWidget_2.setColumnCount(column_count)
-        self.ui.mainTableWidget_2.setRowCount(0)
-        self.ui.mainTableWidget_2.setHorizontalHeaderLabels(col_names)
+        self.ui.searchTabs = {}
+        self.ui.searchTableWidgets = {}
 
+        self.temp_tables_search = {}
+        self.temp_stops_search = {}
+
+        self.search_in_list = list(search_in.keys())
+
+        for i, table in enumerate(self.search_in_list):
+            # add a tab to ui
+            tab = QWidget()
+            tab.setObjectName("advancedSearchTab_" + table)
+            scrollArea = QScrollArea(tab)
+            scrollArea.setGeometry(QtCore.QRect(0, 0, 741, 481))
+            scrollArea.setWidgetResizable(True)
+            scrollArea.setObjectName("advancedSearchScrollArea_" + table)
+            scrollAreaWidgetContents = QWidget()
+            scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 739, 479))
+            scrollAreaWidgetContents.setObjectName("advancedSearchScrollAreaWidgetContents_" + table)
+            mainTableWidget = QTableWidget(scrollAreaWidgetContents)
+            mainTableWidget.setGeometry(QtCore.QRect(0, 0, 739, 479))
+            mainTableWidget.setObjectName("advancedSearchMainTableWidget_" + table)
+            mainTableWidget.setColumnCount(0)
+            mainTableWidget.setRowCount(0)
+            scrollArea.setWidget(scrollAreaWidgetContents)
+            self.ui.searchTabWidget.addTab(tab, "")
+            self.ui.searchTabWidget.setTabText(self.ui.searchTabWidget.indexOf(tab), self._translate("MainWindow",  table))
+            self.ui.searchTabs[table] = tab
+            self.ui.searchTableWidgets[table] = mainTableWidget
+
+            # query
+            query = 'SELECT * FROM {} WHERE'.format(table)
+            query += ' OR '.join([' ' + col + " LIKE '%" + keyword + "%'" for col in search_in[table]])
+
+            # execute sql query
+            c = self.conn.cursor()
+            result = c.execute(query)
+
+            self.temp_tables_search[table] = result
+            self.temp_stops_search[table] = 0
+
+            col_names = self.get_column_names(table)
+            column_count = len(col_names)
+
+            # init table
+            self.ui.searchTableWidgets[table].setColumnCount(column_count)
+            self.ui.searchTableWidgets[table].setRowCount(0)
+            self.ui.searchTableWidgets[table].setHorizontalHeaderLabels(col_names)
+
+            # fill table
+            for row_number, row_data in enumerate(result):
+                if row_number >= self.MAX_TUPLES_PER_PAGE:
+                    self.temp_stops_search[table] = self.MAX_TUPLES_PER_PAGE
+                    break
+
+                self.ui.searchTableWidgets[table].insertRow(row_number)
+                for column_number, data in enumerate(row_data):
+                    self.ui.searchTableWidgets[table].setItem(row_number, column_number, QTableWidgetItem(str(data)))
+
+    def show_more_search(self):
+        active_tab_index = self.ui.searchTabWidget.currentIndex()
+        active_tab_table_name = self.search_in_list[active_tab_index]
+        active_widget = self.ui.searchTableWidgets[active_tab_table_name]
         # fill table
-        for row_number, row_data in enumerate(result):
-            self.ui.mainTableWidget_2.insertRow(row_number)
+        for row_number, row_data in enumerate(self.temp_tables_search[active_tab_table_name]):
+            if row_number >= self.MAX_TUPLES_PER_PAGE:
+                self.temp_stops_search[active_tab_table_name] += self.MAX_TUPLES_PER_PAGE
+                break
+            active_widget.insertRow(row_number + self.temp_stops_search[active_tab_table_name])
             for column_number, data in enumerate(row_data):
-                self.ui.mainTableWidget_2.setItem(row_number, column_number, QTableWidgetItem(str(data)))
+                active_widget.setItem(row_number + self.temp_stops_search[active_tab_table_name], column_number, QTableWidgetItem(str(data)))
 
     def populate_table_checkboxes(self):
         self.ui.checkBoxes = []
-        for i, table_name in enumerate(self.all_table_names):
+        for i, table_name in enumerate([table for table in self.default_places_to_search if len(self.default_places_to_search[table]) != 0]):
             checkBox = QCheckBox(self.ui.scrollAreaWidgetContents_3)
             checkBox.setGeometry(QtCore.QRect(10, 30 + i*20, 200, 20))
             checkBox.setObjectName("checkBox" + table_name)
-
 
             checkBox.setText(self._translate("MainWindow", table_name))
             self.ui.checkBoxes.append(checkBox)

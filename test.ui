@@ -20,14 +20,14 @@
       <x>10</x>
       <y>10</y>
       <width>991</width>
-      <height>651</height>
+      <height>681</height>
      </rect>
     </property>
     <property name="styleSheet">
      <string notr="true"/>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tab_1">
      <attribute name="title">
@@ -128,44 +128,24 @@
        <string>Ouptut:</string>
       </property>
      </widget>
+     <widget class="QPushButton" name="printTablesMoreButton">
+      <property name="geometry">
+       <rect>
+        <x>450</x>
+        <y>620</y>
+        <width>113</width>
+        <height>32</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>more</string>
+      </property>
+     </widget>
     </widget>
     <widget class="QWidget" name="tab_2">
      <attribute name="title">
       <string>Search</string>
      </attribute>
-     <widget class="QScrollArea" name="scrollArea_2">
-      <property name="geometry">
-       <rect>
-        <x>20</x>
-        <y>140</y>
-        <width>721</width>
-        <height>471</height>
-       </rect>
-      </property>
-      <property name="widgetResizable">
-       <bool>true</bool>
-      </property>
-      <widget class="QWidget" name="scrollAreaWidgetContents_2">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>0</y>
-         <width>719</width>
-         <height>469</height>
-        </rect>
-       </property>
-       <widget class="QTableWidget" name="mainTableWidget_2">
-        <property name="geometry">
-         <rect>
-          <x>0</x>
-          <y>0</y>
-          <width>721</width>
-          <height>471</height>
-         </rect>
-        </property>
-       </widget>
-      </widget>
-     </widget>
      <widget class="QLineEdit" name="searchBox">
       <property name="geometry">
        <rect>
@@ -237,6 +217,19 @@
         </property>
        </widget>
       </widget>
+     </widget>
+     <widget class="QPushButton" name="searchMoreButton">
+      <property name="geometry">
+       <rect>
+        <x>450</x>
+        <y>620</y>
+        <width>113</width>
+        <height>32</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>more</string>
+      </property>
      </widget>
     </widget>
     <widget class="QWidget" name="advance_search_tab">
@@ -323,6 +316,19 @@
       </property>
       <property name="text">
        <string>Advanced</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="advancedSearchMoreButton">
+      <property name="geometry">
+       <rect>
+        <x>450</x>
+        <y>620</y>
+        <width>113</width>
+        <height>32</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>more</string>
       </property>
      </widget>
     </widget>
