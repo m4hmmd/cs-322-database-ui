@@ -27,25 +27,12 @@
      <string notr="true"/>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>6</number>
     </property>
     <widget class="QWidget" name="tab_1">
      <attribute name="title">
       <string>Print Tables</string>
      </attribute>
-     <widget class="QPushButton" name="closeConnectionButton">
-      <property name="geometry">
-       <rect>
-        <x>850</x>
-        <y>70</y>
-        <width>113</width>
-        <height>32</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Disconnect</string>
-      </property>
-     </widget>
      <widget class="QComboBox" name="tableComboBox">
       <property name="geometry">
        <rect>
@@ -462,7 +449,7 @@
     </widget>
     <widget class="QWidget" name="tab_5">
      <attribute name="title">
-      <string>Predefined</string>
+      <string>Predefined 2</string>
      </attribute>
      <widget class="QScrollArea" name="scrollArea_tab5">
       <property name="geometry">
@@ -507,7 +494,7 @@
        </rect>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="predefinedQueryTab_D2Q1">
        <attribute name="title">
@@ -1006,6 +993,859 @@
         </property>
         <property name="text">
          <string> (id,name) in</string>
+        </property>
+       </widget>
+      </widget>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_6">
+     <attribute name="title">
+      <string>Predefined 3</string>
+     </attribute>
+     <widget class="QScrollArea" name="scrollArea_tab6">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>140</y>
+        <width>941</width>
+        <height>471</height>
+       </rect>
+      </property>
+      <property name="widgetResizable">
+       <bool>true</bool>
+      </property>
+      <widget class="QWidget" name="scrollAreaWidgetContents_5">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>939</width>
+         <height>469</height>
+        </rect>
+       </property>
+       <widget class="QTableWidget" name="predefined3MainTableWidget">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>941</width>
+          <height>471</height>
+         </rect>
+        </property>
+       </widget>
+      </widget>
+     </widget>
+     <widget class="QTabWidget" name="tabWidget_3">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>0</y>
+        <width>941</width>
+        <height>131</height>
+       </rect>
+      </property>
+      <property name="currentIndex">
+       <number>9</number>
+      </property>
+      <widget class="QWidget" name="predefinedQueryTab_D3Q1">
+       <attribute name="title">
+        <string>D3Q1</string>
+       </attribute>
+       <widget class="QLabel" name="label_6">
+        <property name="geometry">
+         <rect>
+          <x>190</x>
+          <y>10</y>
+          <width>561</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Print how many hosts in each city have declared the area of their property in square meters.</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="predefinedQueryButtonD3Q1">
+        <property name="geometry">
+         <rect>
+          <x>410</x>
+          <y>60</y>
+          <width>113</width>
+          <height>32</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Search</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_28">
+        <property name="geometry">
+         <rect>
+          <x>290</x>
+          <y>30</y>
+          <width>361</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Sort the output based on the city name in ascending order.</string>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="predefinedQueryTab_D3Q2">
+       <attribute name="title">
+        <string>D3Q2</string>
+       </attribute>
+       <widget class="QPushButton" name="predefinedQueryButtonD3Q2">
+        <property name="geometry">
+         <rect>
+          <x>410</x>
+          <y>60</y>
+          <width>113</width>
+          <height>32</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Search</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_9">
+        <property name="geometry">
+         <rect>
+          <x>110</x>
+          <y>20</y>
+          <width>361</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Find the top-5 neighborhoods using median review scores</string>
+        </property>
+       </widget>
+       <widget class="QComboBox" name="comboBoxD3Q2_review">
+        <property name="geometry">
+         <rect>
+          <x>470</x>
+          <y>20</y>
+          <width>201</width>
+          <height>26</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_29">
+        <property name="geometry">
+         <rect>
+          <x>670</x>
+          <y>20</y>
+          <width>81</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>of listings in</string>
+        </property>
+       </widget>
+       <widget class="QComboBox" name="comboBoxD3Q2_city">
+        <property name="geometry">
+         <rect>
+          <x>750</x>
+          <y>20</y>
+          <width>104</width>
+          <height>26</height>
+         </rect>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="predefinedQueryTab_D3Q3">
+       <attribute name="title">
+        <string>D3Q3</string>
+       </attribute>
+       <widget class="QPushButton" name="predefinedQueryButtonD3Q3">
+        <property name="geometry">
+         <rect>
+          <x>410</x>
+          <y>60</y>
+          <width>113</width>
+          <height>32</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Search</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_11">
+        <property name="geometry">
+         <rect>
+          <x>240</x>
+          <y>20</y>
+          <width>501</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Find all the hosts (host_ids, host_names) with the highest number of listings.</string>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="predefinedQueryTab_D3Q4">
+       <attribute name="title">
+        <string>D3Q4</string>
+       </attribute>
+       <widget class="QPushButton" name="predefinedQueryButtonD3Q4">
+        <property name="geometry">
+         <rect>
+          <x>410</x>
+          <y>60</y>
+          <width>113</width>
+          <height>32</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Search</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_12">
+        <property name="geometry">
+         <rect>
+          <x>50</x>
+          <y>10</y>
+          <width>251</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Find the 5 most cheapest Apartments in</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_30">
+        <property name="geometry">
+         <rect>
+          <x>690</x>
+          <y>10</y>
+          <width>21</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>and</string>
+        </property>
+       </widget>
+       <widget class="QComboBox" name="comboBoxD3Q4_start">
+        <property name="geometry">
+         <rect>
+          <x>550</x>
+          <y>10</y>
+          <width>131</width>
+          <height>26</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_31">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>40</y>
+          <width>91</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>having at least </string>
+        </property>
+       </widget>
+       <widget class="QComboBox" name="comboBoxD3Q4_end">
+        <property name="geometry">
+         <rect>
+          <x>720</x>
+          <y>10</y>
+          <width>131</width>
+          <height>26</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QComboBox" name="comboBoxD3Q4_city">
+        <property name="geometry">
+         <rect>
+          <x>300</x>
+          <y>10</y>
+          <width>121</width>
+          <height>26</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_32">
+        <property name="geometry">
+         <rect>
+          <x>430</x>
+          <y>10</y>
+          <width>121</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string> available between </string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_33">
+        <property name="geometry">
+         <rect>
+          <x>160</x>
+          <y>40</y>
+          <width>251</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string> beds, a location review score of at least</string>
+        </property>
+       </widget>
+       <widget class="QSpinBox" name="spinBoxD3Q4_beds">
+        <property name="geometry">
+         <rect>
+          <x>110</x>
+          <y>40</y>
+          <width>48</width>
+          <height>24</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QSpinBox" name="spinBoxD3Q4_score">
+        <property name="geometry">
+         <rect>
+          <x>420</x>
+          <y>40</y>
+          <width>48</width>
+          <height>24</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_34">
+        <property name="geometry">
+         <rect>
+          <x>470</x>
+          <y>40</y>
+          <width>451</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>, flexible cancellation, and listed by a host with a verifiable government id.</string>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="predefinedQueryTab_D3Q5">
+       <attribute name="title">
+        <string>D3Q5</string>
+       </attribute>
+       <widget class="QPushButton" name="predefinedQueryButtonD3Q5">
+        <property name="geometry">
+         <rect>
+          <x>410</x>
+          <y>60</y>
+          <width>113</width>
+          <height>32</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Search</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_21">
+        <property name="geometry">
+         <rect>
+          <x>70</x>
+          <y>10</y>
+          <width>131</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Find the top-5 rated (</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_26">
+        <property name="geometry">
+         <rect>
+          <x>230</x>
+          <y>30</y>
+          <width>481</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string> with at least two of these facilities: Wifi, Internet, TV, and Free street parking.</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_27">
+        <property name="geometry">
+         <rect>
+          <x>419</x>
+          <y>10</y>
+          <width>481</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>) listings for each distinct category based on number of accommodated guests</string>
+        </property>
+       </widget>
+       <widget class="QComboBox" name="comboBoxD3Q5">
+        <property name="geometry">
+         <rect>
+          <x>210</x>
+          <y>10</y>
+          <width>201</width>
+          <height>26</height>
+         </rect>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="predefinedQueryTab_D3Q6">
+       <attribute name="title">
+        <string>D3Q6</string>
+       </attribute>
+       <widget class="QPushButton" name="predefinedQueryButtonD3Q6">
+        <property name="geometry">
+         <rect>
+          <x>410</x>
+          <y>60</y>
+          <width>113</width>
+          <height>32</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Search</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_14">
+        <property name="geometry">
+         <rect>
+          <x>170</x>
+          <y>20</y>
+          <width>611</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>What are top three busiest listings per host? The more reviews a listing has, the busier the listing is.</string>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="predefinedQueryTab_D3Q7">
+       <attribute name="title">
+        <string>D3Q7</string>
+       </attribute>
+       <widget class="QLabel" name="label_15">
+        <property name="geometry">
+         <rect>
+          <x>170</x>
+          <y>10</y>
+          <width>461</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>What are the three most frequently used amenities at each neighborhood in </string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="predefinedQueryButtonD3Q7">
+        <property name="geometry">
+         <rect>
+          <x>410</x>
+          <y>60</y>
+          <width>113</width>
+          <height>32</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Search</string>
+        </property>
+       </widget>
+       <widget class="QComboBox" name="comboBoxD3Q7_city">
+        <property name="geometry">
+         <rect>
+          <x>630</x>
+          <y>10</y>
+          <width>131</width>
+          <height>26</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_35">
+        <property name="geometry">
+         <rect>
+          <x>280</x>
+          <y>40</y>
+          <width>121</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>for the listings with</string>
+        </property>
+       </widget>
+       <widget class="QComboBox" name="comboBoxD3Q7_room_type">
+        <property name="geometry">
+         <rect>
+          <x>400</x>
+          <y>40</y>
+          <width>131</width>
+          <height>26</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_36">
+        <property name="geometry">
+         <rect>
+          <x>530</x>
+          <y>40</y>
+          <width>71</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string> room type?</string>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="predefinedQueryTab_D3Q8">
+       <attribute name="title">
+        <string>D3Q8</string>
+       </attribute>
+       <widget class="QPushButton" name="predefinedQueryButtonD3Q8">
+        <property name="geometry">
+         <rect>
+          <x>410</x>
+          <y>60</y>
+          <width>113</width>
+          <height>32</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Search</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_16">
+        <property name="geometry">
+         <rect>
+          <x>80</x>
+          <y>10</y>
+          <width>231</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>What is the difference in the average </string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_37">
+        <property name="geometry">
+         <rect>
+          <x>280</x>
+          <y>40</y>
+          <width>381</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>and of the host who has the least diverse way of verifications.</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_38">
+        <property name="geometry">
+         <rect>
+          <x>520</x>
+          <y>10</y>
+          <width>351</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>of the host who has the most diverse way of verifications </string>
+        </property>
+       </widget>
+       <widget class="QComboBox" name="comboBoxD3Q8">
+        <property name="geometry">
+         <rect>
+          <x>320</x>
+          <y>10</y>
+          <width>191</width>
+          <height>26</height>
+         </rect>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="predefinedQueryTab_D3Q9">
+       <attribute name="title">
+        <string>D3Q9</string>
+       </attribute>
+       <widget class="QPushButton" name="predefinedQueryButtonD3Q9">
+        <property name="geometry">
+         <rect>
+          <x>410</x>
+          <y>60</y>
+          <width>113</width>
+          <height>32</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Search</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_17">
+        <property name="geometry">
+         <rect>
+          <x>30</x>
+          <y>20</y>
+          <width>811</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>What is the city who has the highest number of reviews for the room types whose average number of accommodates are greater than</string>
+        </property>
+       </widget>
+       <widget class="QSpinBox" name="spinBoxD3Q9">
+        <property name="geometry">
+         <rect>
+          <x>850</x>
+          <y>20</y>
+          <width>48</width>
+          <height>24</height>
+         </rect>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="predefinedQueryTab_D3Q10">
+       <attribute name="title">
+        <string>D3Q10</string>
+       </attribute>
+       <widget class="QPushButton" name="predefinedQueryButtonD3Q10">
+        <property name="geometry">
+         <rect>
+          <x>410</x>
+          <y>60</y>
+          <width>113</width>
+          <height>32</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Search</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_18">
+        <property name="geometry">
+         <rect>
+          <x>90</x>
+          <y>10</y>
+          <width>181</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Print all the neighborhoods in</string>
+        </property>
+       </widget>
+       <widget class="QComboBox" name="comboBoxD3Q10_city">
+        <property name="geometry">
+         <rect>
+          <x>270</x>
+          <y>10</y>
+          <width>161</width>
+          <height>26</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_39">
+        <property name="geometry">
+         <rect>
+          <x>440</x>
+          <y>20</y>
+          <width>121</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>which have at least</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_40">
+        <property name="geometry">
+         <rect>
+          <x>320</x>
+          <y>40</y>
+          <width>311</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string> and their host has joined airbnb before 01.06.2017</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_43">
+        <property name="geometry">
+         <rect>
+          <x>610</x>
+          <y>20</y>
+          <width>281</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>percent of their listings occupied in year 2019</string>
+        </property>
+       </widget>
+       <widget class="QSpinBox" name="spinBoxD3Q10">
+        <property name="geometry">
+         <rect>
+          <x>560</x>
+          <y>10</y>
+          <width>48</width>
+          <height>24</height>
+         </rect>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="predefinedQueryTab_D3Q11">
+       <attribute name="title">
+        <string>D3Q11</string>
+       </attribute>
+       <widget class="QPushButton" name="predefinedQueryButtonD3Q11">
+        <property name="geometry">
+         <rect>
+          <x>410</x>
+          <y>60</y>
+          <width>113</width>
+          <height>32</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Search</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_22">
+        <property name="geometry">
+         <rect>
+          <x>230</x>
+          <y>20</y>
+          <width>211</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Print all the countries that at least </string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_23">
+        <property name="geometry">
+         <rect>
+          <x>500</x>
+          <y>20</y>
+          <width>251</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>% of their listings were available in 2018.</string>
+        </property>
+       </widget>
+       <widget class="QSpinBox" name="spinBoxD3Q11">
+        <property name="geometry">
+         <rect>
+          <x>440</x>
+          <y>20</y>
+          <width>48</width>
+          <height>24</height>
+         </rect>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="predefinedQueryTab_D3Q12">
+       <attribute name="title">
+        <string>D3Q12</string>
+       </attribute>
+       <widget class="QPushButton" name="predefinedQueryButtonD3Q12">
+        <property name="geometry">
+         <rect>
+          <x>410</x>
+          <y>60</y>
+          <width>113</width>
+          <height>32</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Search</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_24">
+        <property name="geometry">
+         <rect>
+          <x>110</x>
+          <y>10</y>
+          <width>181</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Print all the neighborhouds in</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_25">
+        <property name="geometry">
+         <rect>
+          <x>440</x>
+          <y>20</y>
+          <width>101</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>where more than</string>
+        </property>
+       </widget>
+       <widget class="QComboBox" name="comboBoxD3Q12">
+        <property name="geometry">
+         <rect>
+          <x>300</x>
+          <y>10</y>
+          <width>131</width>
+          <height>26</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_41">
+        <property name="geometry">
+         <rect>
+          <x>340</x>
+          <y>40</y>
+          <width>281</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>cancelation policy is strict with grace period.</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_42">
+        <property name="geometry">
+         <rect>
+          <x>610</x>
+          <y>20</y>
+          <width>211</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>percent of their accommodation’s </string>
+        </property>
+       </widget>
+       <widget class="QSpinBox" name="spinBoxD3Q12">
+        <property name="geometry">
+         <rect>
+          <x>550</x>
+          <y>20</y>
+          <width>48</width>
+          <height>24</height>
+         </rect>
         </property>
        </widget>
       </widget>

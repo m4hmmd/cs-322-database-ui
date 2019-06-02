@@ -7,8 +7,6 @@ import cx_Oracle
 
 from mainWindow import Ui_MainWindow
 
-
-
 class MainWindow:
     MAX_TUPLES_PER_PAGE = 1000
     places_to_search = set()  # gonna be a set of tuples (TABLE_NAME, COLUMN_NAME)
@@ -16,7 +14,12 @@ class MainWindow:
     _translate = QtCore.QCoreApplication.translate
     all_table_names = ['Has_Cities', 'Countries']
     all_amenities = ['Wifi', 'TV']
+    all_cities = ['Barcelona', 'Berlin', 'Madrid']
     all_property_types = ['Apartment']
+    all_room_types = ['Private Room']
+    all_review_score_types = ['review_scores_rating', 'review_scores_accuracy', 'review_scores_cleanliness',
+                                       'review_scores_checkin', 'review_scores_communication', 'review_scores_location',
+                                       'review_scores_value']
     all_months_start = ['2018-11-07', '2018-12-01', '2019-01-01', '2019-02-01', '2019-03-01', '2019-04-01', '2019-05-01', '2019-06-01', '2019-07-01', '2019-08-01', '2019-09-01', '2019-10-01', '2019-11-01']
     all_months_end = ['2018-11-30', '2018-12-31', '2019-01-31', '2019-02-28', '2019-03-31', '2019-04-30', '2019-05-31', '2019-06-30', '2019-07-31', '2019-08-31', '2019-09-30', '2019-10-31', '2019-11-30']
     all_months = ['2018-11', '2018-12', '2019-01', '2019-02', '2019-03', '2019-04', '2019-05', '2019-06', '2019-07', '2019-08', '2019-09', '2019-10', '2019-11']
@@ -25,14 +28,14 @@ class MainWindow:
                                 'CANCELLATION_POLICIES': ['CANCELLATION_POLICY'],
                                 'COUNTRIES': ['COUNTRY'],
                                 'DATES': ['CAL_DATE'],
-                                'HAS_AMENITIES': [],
+                                'HAS_AMENITIES': ['AMENITY_ID'],
                                 'HAS_CITIES': ['CITY'],
-                                'HAS_INFO': ['LISTING_NAME', 'SUMMARY_INFO', 'SPACE_INFO', 'NEIGHBORHOOD_OVERVIEW'], #TODO not DESCRIPTION; should it be here?
+                                'HAS_INFO': ['LISTING_NAME', 'SUMMARY_INFO', 'SPACE_INFO', 'NEIGHBORHOOD_OVERVIEW'],
                                 'HAS_NEIGHBOURHOODS': ['NEIGHBOURHOOD'],
                                 'HAS_SCORES': [],
                                 'HAS_VERIFICATIONS': [],
                                 'HOST_RESPONSE_TIMES': [],
-                                'HOSTS': [],
+                                'HOSTS': ['HOST_NAME'],
                                 'LISTINGS': [],
                                 'PRICES': [],
                                 'PROPERTY_TYPES': ['PROPERTY_TYPE'],
@@ -40,7 +43,7 @@ class MainWindow:
                                 'ROOM_TYPES': [],
                                 'RULES': [],
                                 'UI_TEST': [],
-                                'VERIFICATIONS': []
+                                'VERIFICATIONS': ['VERIFICATION']
                                 }
 
     def __init__(self):
@@ -52,6 +55,7 @@ class MainWindow:
         self.get_primary_keys()
         self.get_all_amenities()
         self.get_all_property_types()
+        self.get_all_room_types()
 
 
         self.main_win = QMainWindow()
@@ -68,7 +72,6 @@ class MainWindow:
         # buttons
         self.ui.findTableButton.clicked.connect(self.show_table)
         self.ui.showInputBarsButton.clicked.connect(self.create_insert_form)
-        self.ui.closeConnectionButton.clicked.connect(self.close_connection)
         self.ui.searchButton.clicked.connect(self.search_keyword)
         self.ui.addSearchDetailsButton.clicked.connect(self.add_search_details)
         self.ui.advancedSearchButton.clicked.connect(self.advanced_search_keyword)
@@ -91,23 +94,70 @@ class MainWindow:
         self.ui.spinBoxD2Q8.setValue(8)
         self.ui.comboBoxD2Q9.setCurrentText('Spain')
         self.ui.comboBoxD2Q9.addItems(['Spain', 'Germany'])
-        self.ui.comboBoxD2Q10_c.addItems(['Barcelona', 'Madrid', 'Berlin'])
+        self.ui.comboBoxD2Q10_c.addItems(self.all_cities)
         self.ui.comboBoxD2Q10_c.setCurrentText('Barcelona')
         self.ui.comboBoxD2Q10_pt.addItems(self.all_property_types)
         self.ui.comboBoxD2Q10_pt.setCurrentText('Apartment')
 
-        # predefined query functions
-        self.ui.predefinedQueryButtonD2Q1.clicked.connect(self.d1q1)
-        self.ui.predefinedQueryButtonD2Q2.clicked.connect(self.d1q2)
-        self.ui.predefinedQueryButtonD2Q3.clicked.connect(self.d1q3)
-        self.ui.predefinedQueryButtonD2Q4.clicked.connect(self.d1q4)
-        self.ui.predefinedQueryButtonD2Q5.clicked.connect(self.d1q5)
-        self.ui.predefinedQueryButtonD2Q6.clicked.connect(self.d1q6)
-        self.ui.predefinedQueryButtonD2Q7.clicked.connect(self.d1q7)
-        self.ui.predefinedQueryButtonD2Q8.clicked.connect(self.d1q8)
-        self.ui.predefinedQueryButtonD2Q9.clicked.connect(self.d1q9)
-        self.ui.predefinedQueryButtonD2Q10.clicked.connect(self.d1q10)
 
+        self.ui.comboBoxD3Q2_review.addItems(self.all_review_score_types)
+        self.ui.comboBoxD3Q2_review.setCurrentText('review_scores_rating')
+        self.ui.comboBoxD3Q2_city.addItems(self.all_cities)
+        self.ui.comboBoxD3Q2_city.setCurrentText('Madrid')
+        self.ui.comboBoxD3Q4_city.addItems(self.all_cities)
+        self.ui.comboBoxD3Q4_city.setCurrentText('Berlin')
+        self.ui.comboBoxD3Q4_start.addItems(self.all_months_start)
+        self.ui.comboBoxD3Q4_start.setCurrentText('2019-03-01')
+        self.ui.comboBoxD3Q4_end.addItems(self.all_months_end)
+        self.ui.comboBoxD3Q4_end.setCurrentText('2019-04-30')
+        self.ui.spinBoxD3Q4_beds.setValue(2)
+        self.ui.spinBoxD3Q4_score.setValue(8)
+        self.ui.spinBoxD3Q4_score.setMaximum(10)
+
+        self.ui.comboBoxD3Q5.addItems(self.all_review_score_types)
+        self.ui.comboBoxD3Q5.setCurrentText('review_scores_rating')
+        self.ui.comboBoxD3Q7_city.addItems(self.all_cities)
+        self.ui.comboBoxD3Q7_city.setCurrentText('Berlin')
+        self.ui.comboBoxD3Q7_room_type.addItems(self.all_room_types)
+        self.ui.comboBoxD3Q7_room_type.setCurrentText('Private room')
+        self.ui.comboBoxD3Q8.addItems(self.all_review_score_types)
+        self.ui.comboBoxD3Q8.setCurrentText('review_scores_communication')
+        self.ui.spinBoxD3Q9.setValue(3)
+        self.ui.comboBoxD3Q10_city.addItems(self.all_cities)
+        self.ui.comboBoxD3Q10_city.setCurrentText('Madrid')
+        self.ui.spinBoxD3Q10.setValue(50)
+        self.ui.spinBoxD3Q10.setMaximum(100)
+        self.ui.spinBoxD3Q11.setValue(20)
+        self.ui.spinBoxD3Q11.setMaximum(100)
+        self.ui.comboBoxD3Q12.addItems(self.all_cities)
+        self.ui.comboBoxD3Q12.setCurrentText('Barcelona')
+        self.ui.spinBoxD3Q12.setValue(5)
+        self.ui.spinBoxD3Q12.setMaximum(100)
+
+        # predefined query functions
+        self.ui.predefinedQueryButtonD2Q1.clicked.connect(self.d2q1)
+        self.ui.predefinedQueryButtonD2Q2.clicked.connect(self.d2q2)
+        self.ui.predefinedQueryButtonD2Q3.clicked.connect(self.d2q3)
+        self.ui.predefinedQueryButtonD2Q4.clicked.connect(self.d2q4)
+        self.ui.predefinedQueryButtonD2Q5.clicked.connect(self.d2q5)
+        self.ui.predefinedQueryButtonD2Q6.clicked.connect(self.d2q6)
+        self.ui.predefinedQueryButtonD2Q7.clicked.connect(self.d2q7)
+        self.ui.predefinedQueryButtonD2Q8.clicked.connect(self.d2q8)
+        self.ui.predefinedQueryButtonD2Q9.clicked.connect(self.d2q9)
+        self.ui.predefinedQueryButtonD2Q10.clicked.connect(self.d2q10)
+
+        self.ui.predefinedQueryButtonD3Q1.clicked.connect(self.d3q1)
+        self.ui.predefinedQueryButtonD3Q2.clicked.connect(self.d3q2)
+        self.ui.predefinedQueryButtonD3Q3.clicked.connect(self.d3q3)
+        self.ui.predefinedQueryButtonD3Q4.clicked.connect(self.d3q4)
+        self.ui.predefinedQueryButtonD3Q5.clicked.connect(self.d3q5)
+        self.ui.predefinedQueryButtonD3Q6.clicked.connect(self.d3q6)
+        self.ui.predefinedQueryButtonD3Q7.clicked.connect(self.d3q7)
+        self.ui.predefinedQueryButtonD3Q8.clicked.connect(self.d3q8)
+        self.ui.predefinedQueryButtonD3Q9.clicked.connect(self.d3q9)
+        self.ui.predefinedQueryButtonD3Q10.clicked.connect(self.d3q10)
+        self.ui.predefinedQueryButtonD3Q11.clicked.connect(self.d3q11)
+        self.ui.predefinedQueryButtonD3Q12.clicked.connect(self.d3q12)
 
     def show(self):
         self.main_win.show()
@@ -143,6 +193,11 @@ class MainWindow:
         c = self.conn.cursor()
         c.execute("Select PROPERTY_TYPE from PROPERTY_TYPES")
         self.all_property_types = [x[0] for x in c.fetchall()]
+
+    def get_all_room_types(self):
+        c = self.conn.cursor()
+        c.execute("Select ROOM_TYPE from ROOM_TYPES")
+        self.all_room_types = [x[0] for x in c.fetchall()]
 
     def populate_table_names(self):
         self.ui.tableComboBox.addItems(self.all_table_names)
@@ -564,7 +619,7 @@ class MainWindow:
         self.finish_delete()
 
     # functions for predefined queries
-    def d1q1(self):
+    def d2q1(self):
         nbedrooms = self.ui.spinBoxD2Q1.value()
         query = "SELECT AVG(L.price) FROM Listings L WHERE L.bedrooms={}".format(nbedrooms)
         c  = self.conn.cursor()
@@ -581,7 +636,7 @@ class MainWindow:
         self.ui.predefinedMainTableWidget.insertRow(0)
         self.ui.predefinedMainTableWidget.setItem(0, 0, QTableWidgetItem(str(price)))
 
-    def d1q2(self):
+    def d2q2(self):
         score_field = self.ui.comboBoxD2Q2.currentText()
 
         query = "SELECT AVG(S.review_scores_{}) " \
@@ -602,7 +657,7 @@ class MainWindow:
         self.ui.predefinedMainTableWidget.insertRow(0)
         self.ui.predefinedMainTableWidget.setItem(0, 0, QTableWidgetItem(str(avg_score)))
 
-    def d1q3(self):
+    def d2q3(self):
         start_date = self.all_months_start[self.all_months.index(self.ui.comboBoxD2Q3_start.currentText())]
         start_end = self.all_months_end[self.all_months.index(self.ui.comboBoxD2Q3_end.currentText())]
 
@@ -631,7 +686,7 @@ class MainWindow:
             for column_number, data in enumerate(row_data):
                 self.ui.predefinedMainTableWidget.setItem(row_number, column_number, QTableWidgetItem(str(data)))
 
-    def d1q4(self):
+    def d2q4(self):
         query = "SELECT COUNT(UNIQUE L.listing_id) FROM Listings L, Hosts H1, Hosts H2 WHERE H1.host_name=H2.host_name AND NOT (H1.host_id=H2.host_id) AND L.host_id=H1.host_id"
 
         c = self.conn.cursor()
@@ -647,7 +702,7 @@ class MainWindow:
         self.ui.predefinedMainTableWidget.insertRow(0)
         self.ui.predefinedMainTableWidget.setItem(0, 0, QTableWidgetItem(str(avg_score)))
 
-    def d1q5(self):
+    def d2q5(self):
         query = "SELECT DISTINCT D.cal_date " \
                 "FROM Dates D, Listings L, Hosts H " \
                 "WHERE H.host_name='Viajes Eco' AND H.host_id=L.host_id AND L.listing_id=D.listing_id AND D.available='t'"
@@ -669,7 +724,7 @@ class MainWindow:
             for column_number, data in enumerate(row_data):
                 self.ui.predefinedMainTableWidget.setItem(row_number, column_number, QTableWidgetItem(str(data)))
 
-    def d1q6(self):
+    def d2q6(self):
         nlistings = self.ui.spinBoxD2Q6.value()
         query = "SELECT H.HOST_ID, H.HOST_NAME FROM HOSTS H WHERE {} = ( SELECT COUNT(*) FROM LISTINGS L WHERE L.HOST_ID = H.HOST_ID )".format(nlistings)
         c = self.conn.cursor()
@@ -690,7 +745,7 @@ class MainWindow:
                 self.ui.predefinedMainTableWidget.setItem(row_number, column_number, QTableWidgetItem(str(data)))
 
 
-    def d1q7(self):
+    def d2q7(self):
         amenity_name = self.ui.comboBoxD2Q7.currentText()
         query =  "SELECT avg_wifi - avg_without_wifi " \
                  "FROM ( SELECT AVG(Lw.price) as avg_wifi " \
@@ -713,7 +768,7 @@ class MainWindow:
         self.ui.predefinedMainTableWidget.insertRow(0)
         self.ui.predefinedMainTableWidget.setItem(0, 0, QTableWidgetItem(str(avg_score)))
 
-    def d1q8(self):
+    def d2q8(self):
         nbeds = self.ui.spinBoxD2Q8.value()
         query = "SELECT avg_berlin - avg_madrid FROM ( (SELECT AVG (L1.price) AS avg_berlin " \
                 "FROM Listings L1, Has_Neighbourhoods N1, Has_Cities C1 " \
@@ -736,7 +791,7 @@ class MainWindow:
         self.ui.predefinedMainTableWidget.insertRow(0)
         self.ui.predefinedMainTableWidget.setItem(0, 0, QTableWidgetItem(str(price)))
 
-    def d1q9(self):
+    def d2q9(self):
         country = self.ui.comboBoxD2Q9.currentText()
         query = "SELECT DISTINCT L1.host_id, H1.host_name " \
                 "FROM Listings L1, Hosts H1, Has_Neighbourhoods N1, Has_Cities C1, Countries Cn " \
@@ -761,7 +816,7 @@ class MainWindow:
             for column_number, data in enumerate(row_data):
                 self.ui.predefinedMainTableWidget.setItem(row_number, column_number, QTableWidgetItem(str(data)))
 
-    def d1q10(self):
+    def d2q10(self):
         property_type = self.ui.comboBoxD2Q10_pt.currentText()
         city = self.ui.comboBoxD2Q10_c.currentText()
         query = "SELECT L.listing_id, I.LISTING_NAME FROM LISTINGS L " \
@@ -795,8 +850,323 @@ class MainWindow:
                 self.ui.predefinedMainTableWidget.setItem(row_number, column_number,
                                                           QTableWidgetItem(str(data)))
 
+    def print_result_predefined_3(self, query, col_names):
+        c = self.conn.cursor()
+        result = c.execute(query)
+
+        # find column headers
+        # col_names = ["HOST_ID", "HOST_NAME"]
+
+        # init table
+        self.ui.predefined3MainTableWidget.setColumnCount(len(col_names))
+        self.ui.predefined3MainTableWidget.setRowCount(0)
+        self.ui.predefined3MainTableWidget.setHorizontalHeaderLabels(col_names)
+
+        # fill table
+        for row_number, row_data in enumerate(result):
+            self.ui.predefined3MainTableWidget.insertRow(row_number)
+            for column_number, data in enumerate(row_data):
+                self.ui.predefined3MainTableWidget.setItem(row_number, column_number, QTableWidgetItem(str(data)))
+
+    def d3q1(self):
+        query = "WITH Hosts_city AS (" \
+                "SELECT L.host_id, HC.city " \
+                "FROM Listings L, Has_Neighbourhoods HN, Has_Cities HC " \
+                "WHERE L.square_feet IS NOT NULL AND L.neighbourhood_id=HN.neighbourhood_id AND HN.city_id=HC.city_id " \
+                ") " \
+                "SELECT COUNT(*) AS n_hosts, HOC.city " \
+                "FROM Hosts_city HOC " \
+                "GROUP BY HOC.city " \
+                "ORDER BY HOC.city"
+
+        self.print_result_predefined_3(query, ["N_HOSTS", "CITY"])
+
+    def d3q2(self):
+        score_field = self.ui.comboBoxD3Q2_review.currentText()
+        city = self.ui.comboBoxD3Q2_city.currentText()
+
+        query = "WITH Listings_neigh_scores AS (" \
+                "    SELECT L.listing_id, L.neighbourhood_id, HS.{}" \
+                "    FROM Listings L, Has_Scores HS, Has_Neighbourhoods HN1, Has_Cities HC" \
+                "    WHERE L.listing_id=HS.listing_id AND L.neighbourhood_id=HN1.neighbourhood_id AND HN1.city_id=HC.city_id AND HC.city='{}' AND HS.{} IS NOT NULL" \
+                "), Neigh_median AS (" \
+                "    SELECT" \
+                "       neighbourhood_id," \
+                "       AVG({}) AS median_score" \
+                "    FROM" \
+                "    (" \
+                "       SELECT" \
+                "          neighbourhood_id," \
+                "          {}," \
+                "          ROW_NUMBER() OVER (" \
+                "         PARTITION BY neighbourhood_id" \
+                "         ORDER BY {} ASC) AS row_asc," \
+                "          ROW_NUMBER() OVER (" \
+                "         PARTITION BY neighbourhood_id" \
+                "         ORDER BY {} DESC) AS row_desc" \
+                "       FROM Listings_neigh_scores" \
+                "    )" \
+                "    WHERE" \
+                "       row_asc IN (row_desc, row_desc - 1, row_desc + 1)" \
+                "    GROUP BY neighbourhood_id" \
+                "    ORDER BY neighbourhood_id" \
+                ")" \
+                " SELECT HN.neighbourhood" \
+                " FROM Neigh_median NM, Has_Neighbourhoods HN" \
+                " WHERE NM.neighbourhood_id=HN.neighbourhood_id" \
+                " ORDER BY NM.median_score DESC" \
+                " FETCH NEXT 5 ROWS ONLY".format(score_field, city, score_field, score_field, score_field, score_field, score_field)
+
+        print(query)
+        self.print_result_predefined_3(query, ['NEIGHBOURHOOD'])
+
+    def d3q3(self):
+        query = "SELECT H.HOST_ID, H.HOST_NAME FROM HOSTS H " \
+                "WHERE H.HOST_ID = ( " \
+                "SELECT L.HOST_ID FROM LISTINGS L " \
+                "GROUP BY L.HOST_ID " \
+                "ORDER BY COUNT(*) DESC " \
+                "FETCH NEXT ROW ONLY)"
+
+        self.print_result_predefined_3(query, ["HOST_ID", "HOST_NAME"])
+
+    def d3q4(self):
+        start = self.ui.comboBoxD3Q4_start.currentText()
+        end = self.ui.comboBoxD3Q4_end.currentText()
+        city = self.ui.comboBoxD3Q4_city.currentText()
+        beds = self.ui.spinBoxD3Q4_beds.value()
+        rating = self.ui.spinBoxD3Q4_score.value()
+
+        query = "SELECT D.listing_id, AVG(D.price) AS avg_prices " \
+                "FROM Dates D, Listings L, Has_Neighbourhoods HN, Has_Cities HC, Has_Scores HS, Property_Types PT, Rules R, Cancellation_Policies CP, Has_Verifications HV, Verifications V " \
+                "WHERE L.beds>{} " \
+                "    AND L.neighbourhood_id=HN.neighbourhood_id AND HN.city_id=HC.city_id AND HC.city='{}' " \
+                "    AND L.listing_id=HS.listing_id AND HS.review_scores_location>={} " \
+                "    AND L.property_type_id=PT.property_type_id AND PT.property_type='Apartment' " \
+                "    AND L.listing_id=R.listing_id AND R.cancellation_policy_id=CP.cancellation_policy_id AND CP.cancellation_policy='flexible' " \
+                "    AND L.listing_id=D.listing_id AND D.cal_date>=to_date('{}', 'YYYY-MM-DD') AND D.cal_date<=to_date('{}', 'YYYY-MM-DD') AND D.available='t' " \
+                "    AND L.host_id=HV.host_id AND HV.verification_id=V.verification_id AND V.verification='government_id' " \
+                "GROUP BY D.listing_id " \
+                "ORDER BY avg_prices ASC " \
+                "FETCH NEXT 5 ROWS ONLY".format(beds-1, city, rating, start, end)
+
+        self.print_result_predefined_3(query, ['LISTING_ID', 'AVG_PRICES'])
+
+    def d3q5(self):
+        score_field = self.ui.comboBoxD3Q5.currentText()
+        print(score_field)
+        query = "SELECT * FROM" \
+                "(" \
+                "  WITH LISTING_RATINGS AS" \
+                "  (" \
+                "    SELECT L.LISTING_ID, L.ACCOMMODATES, S.{} FROM LISTINGS L" \
+                "    INNER JOIN HAS_SCORES S ON L.LISTING_ID = S.LISTING_ID" \
+                "    WHERE L.LISTING_ID IN" \
+                "    (" \
+                "      SELECT HA.LISTING_ID FROM HAS_AMENITIES HA" \
+                "      WHERE HA.AMENITY_ID IN" \
+                "      (" \
+                "        SELECT AMENITY_ID FROM AMENITIES" \
+                "        WHERE AMENITY_NAME IN ('Wifi', 'Internet', 'TV', 'Free street parking')" \
+                "      )" \
+                "      GROUP BY HA.LISTING_ID" \
+                "      HAVING COUNT(HA.AMENITY_ID) >= 2" \
+                "    )" \
+                "  )" \
+                "  SELECT LR.ACCOMMODATES, LR.LISTING_ID, RANK() OVER" \
+                "  (" \
+                "    PARTITION BY LR.ACCOMMODATES" \
+                "    ORDER BY LR.{} DESC NULLS LAST" \
+                "  ) HIGHEST_RATED" \
+                "  FROM LISTING_RATINGS LR" \
+                ")" \
+                "WHERE HIGHEST_RATED <= 5"\
+            .format(score_field, score_field)
+
+        self.print_result_predefined_3(query, ['ACCOMODATES', 'LISTING_ID', 'HIGEST_RATED'])
+
+    def d3q6(self):
+        query = "SELECT * FROM " \
+                "( " \
+                "  WITH BUSYNESS AS ( " \
+                "    SELECT L.HOST_ID, L.LISTING_ID, COUNT(R.REVIEW_ID) NUM_REVIEWS FROM LISTINGS L " \
+                "    INNER JOIN REVIEWED_BY R ON L.LISTING_ID = R.LISTING_ID " \
+                "    GROUP BY L.HOST_ID, L.LISTING_ID " \
+                "  ) " \
+                "  SELECT B.HOST_ID, B.LISTING_ID, RANK() OVER " \
+                "  ( " \
+                "    PARTITION BY B.HOST_ID " \
+                "    ORDER BY B.NUM_REVIEWS DESC " \
+                "  ) AS BUSYNESS_RANK " \
+                "  FROM BUSYNESS B " \
+                ")  " \
+                "WHERE BUSYNESS_RANK <= 3"
+
+        self.print_result_predefined_3(query, ['HOST_ID', 'LISTING_ID', 'BUSYNESS_RANK'])
+
+    def d3q7(self):
+        room_type = self.ui.comboBoxD3Q7_room_type.currentText()
+        city = self.ui.comboBoxD3Q7_city.currentText()
+
+        query = "SELECT * FROM " \
+                "( " \
+                "  WITH AMENITY_USES AS " \
+                "  ( " \
+                "    SELECT L.NEIGHBOURHOOD_ID, A.AMENITY_ID, COUNT(L.LISTING_ID) NUM_LISTINGS " \
+                "    FROM LISTINGS L " \
+                "    INNER JOIN HAS_NEIGHBOURHOODS N ON L.NEIGHBOURHOOD_ID = N.NEIGHBOURHOOD_ID " \
+                "    INNER JOIN HAS_CITIES C ON N.CITY_ID = C.CITY_ID " \
+                "    INNER JOIN HAS_AMENITIES A ON L.LISTING_ID = A.LISTING_ID " \
+                "    WHERE L.ROOM_TYPE_ID = ( " \
+                "      SELECT R.ROOM_TYPE_ID FROM ROOM_TYPES R " \
+                "      WHERE R.ROOM_TYPE = '{}' " \
+                "    ) " \
+                "    AND C.CITY = '{}' " \
+                "    GROUP BY L.NEIGHBOURHOOD_ID, A.AMENITY_ID " \
+                "  ) " \
+                "  SELECT AU.NEIGHBOURHOOD_ID, AU.AMENITY_ID, RANK() OVER " \
+                "  ( " \
+                "    PARTITION BY NEIGHBOURHOOD_ID " \
+                "    ORDER BY NUM_LISTINGS DESC " \
+                "  ) MOST_USED " \
+                "  FROM AMENITY_USES AU " \
+                ") " \
+                "WHERE MOST_USED <= 3".format(room_type, city)
+
+        self.print_result_predefined_3(query, ['NEIGHBOURHOOD_ID', 'AMENITY_ID', 'MOST_USED'])
+
+    def d3q8(self):
+        score_field = self.ui.comboBoxD3Q8.currentText()
+
+        query = "WITH Host_nVerifications AS ( " \
+                "    SELECT DISTINCT H.host_id, 0 AS n_verifications " \
+                "    FROM Hosts H " \
+                "    WHERE H.host_id NOT IN ( " \
+                "        SELECT HV.host_id " \
+                "        FROM Has_Verifications HV) " \
+                "    UNION " \
+                "    SELECT HV.host_id, COUNT(*) as n_verifications " \
+                "    FROM Has_Verifications HV " \
+                "    GROUP BY HV.host_id " \
+                "), " \
+                "Host_nVerifications_rscommunication AS ( " \
+                "    SELECT HNV.*, HS.{} " \
+                "    FROM Host_nVerifications HNV, Listings L, Has_Scores HS " \
+                "    WHERE HNV.host_id=L.host_id AND L.listing_id=HS.listing_id AND HS.{} IS NOT NULL " \
+                ") " \
+                "SELECT review_scores_communication_highest - review_scores_communication_lowest " \
+                "FROM ( " \
+                "    SELECT HNVR.{} AS review_scores_communication_highest " \
+                "    FROM Host_nVerifications_rscommunication HNVR " \
+                "    ORDER BY HNVR.n_verifications DESC " \
+                "    FETCH NEXT 1 ROWS ONLY) " \
+                "CROSS JOIN ( " \
+                "    SELECT HNVR.{} AS review_scores_communication_lowest " \
+                "    FROM Host_nVerifications_rscommunication HNVR " \
+                "    ORDER BY HNVR.n_verifications ASC " \
+                "    FETCH NEXT 1 ROWS ONLY)".format(score_field, score_field, score_field, score_field)
+
+        self.print_result_predefined_3(query, ['REVIEW_SCORE_DIFFERENCE'])
+
+    def d3q9(self):
+        n_acc = self.ui.spinBoxD3Q9.value()
+
+        query = "SELECT C.CITY FROM LISTINGS L " \
+                "INNER JOIN HAS_NEIGHBOURHOODS N ON L.NEIGHBOURHOOD_ID = N.NEIGHBOURHOOD_ID " \
+                "INNER JOIN HAS_CITIES C ON N.CITY_ID = C.CITY_ID " \
+                "INNER JOIN REVIEWED_BY R ON L.LISTING_ID = R.LISTING_ID " \
+                "WHERE L.ROOM_TYPE_ID IN " \
+                "  (SELECT ROOM_TYPE_ID FROM LISTINGS " \
+                "  GROUP BY ROOM_TYPE_ID " \
+                "  HAVING AVG(ACCOMMODATES) > {}) " \
+                "GROUP BY C.CITY " \
+                "ORDER BY COUNT(L.LISTING_ID) DESC " \
+                "FETCH NEXT ROW ONLY".format(n_acc)
+
+        self.print_result_predefined_3(query, ['CITY'])
+
+    def d3q10(self):
+        city = self.ui.comboBoxD3Q10_city.currentText()
+        perc = self.ui.spinBoxD3Q10.value()
+
+        query = "WITH Listings_filtered AS ( " \
+                "    SELECT L.listing_id, L.neighbourhood_id " \
+                "    FROM Listings L, Has_Neighbourhoods HN, Has_Cities HC, Hosts H " \
+                "    WHERE L.neighbourhood_id=HN.neighbourhood_id AND HN.city_id=HC.city_id AND HC.city='{}' AND L.host_id=H.host_id AND H.host_since<=to_date('2017-06-01', 'YYYY-MM-DD') " \
+                "), Neigh_ndl AS ( " \
+                "    SELECT COUNT(*) * (to_date('2020-01-01', 'YYYY-MM-DD') - to_date('2019-01-01', 'YYYY-MM-DD')) AS n_days_listings, LF.neighbourhood_id " \
+                "    FROM Listings_filtered LF " \
+                "    GROUP BY LF.neighbourhood_id " \
+                "), Neigh_ndl_a AS ( " \
+                "    SELECT COUNT(*) AS n_days_listings_available, LF.neighbourhood_id " \
+                "    FROM Listings_filtered LF, Dates D " \
+                "    WHERE D.cal_date>=to_date('2019-01-01', 'YYYY-MM-DD') AND D.cal_date<to_date('2020-01-01', 'YYYY-MM-DD') AND LF.listing_id=D.listing_id AND D.available='t' " \
+                "    GROUP BY LF.neighbourhood_id " \
+                ") " \
+                "SELECT HN.neighbourhood " \
+                "FROM Neigh_ndl NDL, Neigh_ndl_a NDLA, Has_Neighbourhoods HN " \
+                "WHERE NDL.neighbourhood_id=NDLA.neighbourhood_id AND NDLA.n_days_listings_available/NDL.n_days_listings>={} AND HN.neighbourhood_id=NDL.neighbourhood_id".format(city, str(int(perc)/100))
+
+        self.print_result_predefined_3(query, ['NEIGHBOURHOOD'])
+
+    def d3q11(self):
+        perc = self.ui.spinBoxD3Q11.value()
+
+        query = "WITH LISTING_COUNTRIES AS " \
+                "( " \
+                "  SELECT LISTING_ID, C.COUNTRY FROM LISTINGS L " \
+                "  INNER JOIN HAS_NEIGHBOURHOODS N ON L.NEIGHBOURHOOD_ID = N.NEIGHBOURHOOD_ID " \
+                "  INNER JOIN HAS_CITIES HC ON N.CITY_ID = HC.CITY_ID " \
+                "  INNER JOIN COUNTRIES C ON HC.COUNTRY_CODE = C.COUNTRY_CODE " \
+                "), NUM_LISTINGS AS " \
+                "( " \
+                "  SELECT COUNTRY, COUNT(LISTING_ID) TOTAL FROM LISTING_COUNTRIES " \
+                "  GROUP BY COUNTRY " \
+                "), AVAILABLE_IN_2018 AS " \
+                "( " \
+                "  SELECT L.COUNTRY, COUNT(DISTINCT L.LISTING_ID) AVAILABLE FROM DATES D " \
+                "  INNER JOIN LISTING_COUNTRIES L ON D.LISTING_ID = L.LISTING_ID " \
+                "  WHERE D.AVAILABLE = 't' " \
+                "  AND D.CAL_DATE >= to_date('2018-01-01', 'YYYY-MM-DD') AND D.CAL_DATE <= to_date('2018-12-31', 'YYYY-MM-DD') " \
+                "  GROUP BY L.COUNTRY " \
+                ") " \
+                "SELECT N.COUNTRY FROM NUM_LISTINGS N " \
+                "INNER JOIN AVAILABLE_IN_2018 A ON N.COUNTRY = A.COUNTRY " \
+                "WHERE A.AVAILABLE >= N.TOTAL / {}".format(str(100/int(perc)))
+
+        self.print_result_predefined_3(query, ['COUNTRY'])
+
+    def d3q12(self):
+        city = self.ui.comboBoxD3Q12.currentText()
+        perc = self.ui.spinBoxD3Q12.value()
+
+        query = "WITH L_{}_cancellation AS ( " \
+                "    SELECT L.listing_id, L.neighbourhood_id, CP.cancellation_policy " \
+                "    FROM Listings L, Rules R, Cancellation_Policies CP, Has_Neighbourhoods HN, Has_Cities HC " \
+                "    WHERE L.listing_id=R.listing_id AND R.cancellation_policy_id=CP.cancellation_policy_id AND L.neighbourhood_id=HN.neighbourhood_id AND HN.city_id=HC.city_id AND HC.city='{}' " \
+                "), Neigh_n_listings_strict AS ( " \
+                "    SELECT COUNT(*) AS n_listings_strict, LBC.neighbourhood_id " \
+                "    FROM L_{}_cancellation LBC " \
+                "    WHERE LBC.cancellation_policy='strict_14_with_grace_period' " \
+                "    GROUP BY LBC.neighbourhood_id " \
+                "), Neigh_n_listings AS ( " \
+                "    SELECT COUNT(*) AS n_listings, LBC.neighbourhood_id " \
+                "    FROM L_{}_cancellation LBC " \
+                "    GROUP BY LBC.neighbourhood_id " \
+                "), Neigh_percent_strict AS ( " \
+                "    SELECT NLS.neighbourhood_id, NLS.n_listings_strict * 100 / NL.n_listings AS percent_strict " \
+                "    FROM Neigh_n_listings_strict NLS, Neigh_n_listings NL " \
+                "    WHERE NLS.neighbourhood_id=NL.neighbourhood_id " \
+                ") " \
+                "SELECT HN.neighbourhood " \
+                "FROM Neigh_percent_strict NPS, Has_Neighbourhoods HN " \
+                "WHERE NPS.percent_strict>={} AND NPS.neighbourhood_id=HN.neighbourhood_id".format(city, city, city, city, perc)
+
+        self.print_result_predefined_3(query, ['NEIGHBOURHOOD'])
+
     def close_connection(self):
         self.conn.close()
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
